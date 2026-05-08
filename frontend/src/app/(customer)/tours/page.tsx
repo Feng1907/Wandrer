@@ -46,7 +46,7 @@ export default function ToursPage() {
   const fetchTours = useCallback(async () => {
     setLoading(true);
     try {
-      const params: Record<string, any> = { page, limit: 12, status: 'ACTIVE' };
+      const params: Record<string, string | number | boolean> = { page, limit: 12, status: 'ACTIVE' };
       if (search) params.search = search;
       if (category) params.category = category;
       if (featured) params.featured = true;
@@ -58,6 +58,7 @@ export default function ToursPage() {
     }
   }, [page, search, category, featured]);
 
+  // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { fetchTours(); }, [fetchTours]);
 
   const resetFilters = () => { setSearch(''); setCategory(''); setFeatured(false); setDuration(''); setPriceMax(''); setPage(1); };

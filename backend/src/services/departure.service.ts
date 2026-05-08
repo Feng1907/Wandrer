@@ -1,5 +1,4 @@
 import prisma from '../utils/prisma';
-import { Prisma } from '@prisma/client';
 
 export interface CreateDepartureDto {
   tourId: string;
@@ -19,7 +18,7 @@ export const createDeparture = async (dto: CreateDepartureDto) => {
       departureDate: new Date(dto.departureDate),
       returnDate: new Date(dto.returnDate),
       availableSlots: dto.availableSlots,
-      priceOverride: dto.priceOverride ? new Prisma.Decimal(dto.priceOverride) : null,
+      priceOverride: dto.priceOverride ? Number(dto.priceOverride) : null,
     },
   });
 };
@@ -35,7 +34,7 @@ export const updateDeparture = async (id: string, dto: Partial<CreateDepartureDt
       ...(dto.returnDate ? { returnDate: new Date(dto.returnDate) } : {}),
       ...(dto.availableSlots !== undefined ? { availableSlots: dto.availableSlots } : {}),
       ...(dto.priceOverride !== undefined
-        ? { priceOverride: dto.priceOverride ? new Prisma.Decimal(dto.priceOverride) : null }
+        ? { priceOverride: dto.priceOverride ? Number(dto.priceOverride) : null }
         : {}),
     },
   });

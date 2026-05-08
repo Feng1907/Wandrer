@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as userService from '../services/user.service';
-import { Role } from '@prisma/client';
+type Role = 'CUSTOMER' | 'ADMIN' | 'STAFF' | 'GUIDE';
 
 export const getUsers = async (req: Request, res: Response) => {
   try {
@@ -19,7 +19,7 @@ export const getUsers = async (req: Request, res: Response) => {
 
 export const updateUserRole = async (req: Request, res: Response) => {
   try {
-    const user = await userService.updateUserRole(req.params.id, req.body.role);
+    const user = await userService.updateUserRole(String(req.params.id), req.body.role);
     res.json(user);
   } catch (err: any) {
     res.status(400).json({ message: err.message });
@@ -28,7 +28,7 @@ export const updateUserRole = async (req: Request, res: Response) => {
 
 export const toggleUserActive = async (req: Request, res: Response) => {
   try {
-    const user = await userService.toggleUserActive(req.params.id);
+    const user = await userService.toggleUserActive(String(req.params.id));
     res.json(user);
   } catch (err: any) {
     res.status(400).json({ message: err.message });
@@ -38,7 +38,7 @@ export const toggleUserActive = async (req: Request, res: Response) => {
 export const createGuideProfile = async (req: Request, res: Response) => {
   try {
     const { bio, languages, experience } = req.body;
-    const guide = await userService.createGuideProfile(req.params.id, bio, languages, experience);
+    const guide = await userService.createGuideProfile(String(req.params.id), bio, languages, experience);
     res.status(201).json(guide);
   } catch (err: any) {
     res.status(400).json({ message: err.message });

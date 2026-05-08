@@ -1,5 +1,5 @@
 import prisma from '../utils/prisma';
-import { Role, Prisma } from '@prisma/client';
+type Role = 'CUSTOMER' | 'ADMIN' | 'STAFF' | 'GUIDE';
 
 export interface UserQuery {
   page?: number;
@@ -12,7 +12,7 @@ export const getUsers = async (query: UserQuery) => {
   const { page = 1, limit = 20, role, search } = query;
   const skip = (page - 1) * limit;
 
-  const where: Prisma.UserWhereInput = {
+  const where: Record<string, unknown> = {
     ...(role ? { role } : {}),
     ...(search
       ? { OR: [{ name: { contains: search } }, { email: { contains: search } }] }

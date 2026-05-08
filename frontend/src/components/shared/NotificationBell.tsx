@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Bell } from 'lucide-react';
 import { useSocket } from '@/hooks/useSocket';
 import { useAuthStore } from '@/store/auth.store';
@@ -19,7 +19,7 @@ export default function NotificationBell() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unread, setUnread] = useState(0);
 
-  useSocket((data: Notification) => {
+  useSocket((data) => {
     setNotifications((prev) => [{ ...data, createdAt: new Date().toISOString() }, ...prev.slice(0, 19)]);
     setUnread((n) => n + 1);
   });

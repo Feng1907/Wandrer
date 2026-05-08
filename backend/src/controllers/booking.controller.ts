@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as bookingService from '../services/booking.service';
-import { BookingStatus } from '@prisma/client';
+type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 
 export const createBooking = async (req: Request, res: Response) => {
   try {
@@ -26,7 +26,7 @@ export const getMyBookings = async (req: Request, res: Response) => {
 export const getBookingById = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.userId;
-    const booking = await bookingService.getBookingById(req.params.id, userId);
+    const booking = await bookingService.getBookingById(String(req.params.id), userId);
     res.json(booking);
   } catch (err: any) {
     res.status(404).json({ message: err.message });
@@ -36,7 +36,7 @@ export const getBookingById = async (req: Request, res: Response) => {
 export const cancelBooking = async (req: Request, res: Response) => {
   try {
     const userId = (req as any).user.userId;
-    const booking = await bookingService.cancelBooking(req.params.id, userId);
+    const booking = await bookingService.cancelBooking(String(req.params.id), userId);
     res.json(booking);
   } catch (err: any) {
     res.status(400).json({ message: err.message });
@@ -59,7 +59,7 @@ export const adminGetBookings = async (req: Request, res: Response) => {
 
 export const adminUpdateStatus = async (req: Request, res: Response) => {
   try {
-    const booking = await bookingService.updateBookingStatus(req.params.id, req.body.status);
+    const booking = await bookingService.updateBookingStatus(String(req.params.id), req.body.status);
     res.json(booking);
   } catch (err: any) {
     res.status(400).json({ message: err.message });

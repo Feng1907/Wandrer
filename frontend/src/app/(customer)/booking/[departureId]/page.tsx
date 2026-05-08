@@ -7,8 +7,16 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2, CheckCircle } from 'lucide-react';
 import api from '@/lib/axios';
-import { formatCurrency, formatDate } from '@/lib/utils';
+import { formatCurrency } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
+
+interface DepartureInfo {
+  departureDate: string;
+  returnDate: string;
+  priceOverride?: number;
+  availableSlots: number;
+  tour: { title: string; basePrice: number; childPrice: number };
+}
 
 const passengerSchema = z.object({
   fullName: z.string().min(2, 'Tên tối thiểu 2 ký tự'),
@@ -19,7 +27,7 @@ const passengerSchema = z.object({
 
 const bookingSchema = z.object({
   contactName: z.string().min(2, 'Nhập họ tên'),
-  contactEmail: z.string().email('Email không hợp lệ'),
+  contactEmail: z.string().regex(/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Email không hợp lệ'),
   contactPhone: z.string().min(9, 'Số điện thoại không hợp lệ'),
   specialRequests: z.string().optional(),
   discountCode: z.string().optional(),
@@ -41,7 +49,7 @@ export default function BookingPage() {
   const router = useRouter();
   const { user } = useAuthStore();
 
-  const [departure, setDeparture] = useState<any>(null);
+  const [departure] = useState<DepartureInfo | null>(null);
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState<StepType>('passengers');
   const [submitting, setSubmitting] = useState(false);
@@ -82,8 +90,8 @@ export default function BookingPage() {
       const { data } = await api.post('/bookings', { ...values, departureId });
       setBookingId(data.id);
       setSuccess(true);
-    } catch (e: any) {
-      alert(e.response?.data?.message ?? 'Lỗi khi đặt tour');
+    } catch (e) {
+      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi khi đặt tour');
     } finally {
       setSubmitting(false);
     }

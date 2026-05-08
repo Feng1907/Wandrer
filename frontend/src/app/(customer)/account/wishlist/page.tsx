@@ -15,7 +15,7 @@ export default function WishlistPage() {
 
   useEffect(() => {
     if (!user) { router.push('/login'); return; }
-    api.get('/wishlist').then(({ data }) => setTours(data.map((item: any) => item.tour))).finally(() => setLoading(false));
+    api.get('/wishlist').then(({ data }) => setTours(data.map((item: { tour: Tour }) => item.tour))).finally(() => setLoading(false));
   }, []);
 
   if (loading) return <div className="py-10 text-center text-neutral-400">Đang tải...</div>;

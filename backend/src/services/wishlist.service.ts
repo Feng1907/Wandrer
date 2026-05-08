@@ -19,5 +19,5 @@ export const getUserWishlist = async (userId: string) =>
 
 export const checkWishlist = async (userId: string, tourIds: string[]) => {
   const saved = await prisma.wishlist.findMany({ where: { userId, tourId: { in: tourIds } }, select: { tourId: true } });
-  return saved.map((w) => w.tourId);
+  return saved.map((w: { tourId: string }) => w.tourId);
 };

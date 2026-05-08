@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Search, ShieldCheck, Ban, CheckCircle } from 'lucide-react';
 import api from '@/lib/axios';
 import { User, Role } from '@/types';
@@ -25,7 +25,7 @@ export default function UsersPage() {
   const [roleFilter, setRoleFilter] = useState<Role | ''>('');
   const [loading, setLoading] = useState(true);
 
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
       const { data } = await api.get('/users', { params: { page, limit: 15, search: search || undefined, role: roleFilter || undefined } });
@@ -34,18 +34,19 @@ export default function UsersPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, search, roleFilter]);
 
-  useEffect(() => { fetchUsers(); }, [page, search, roleFilter]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchUsers(); }, [fetchUsers]);
 
   const handleToggleActive = async (id: string) => {
     await api.patch(`/users/${id}/toggle-active`);
-    fetchUsers();
+    await fetchUsers();
   };
 
   const handleRoleChange = async (id: string, role: Role) => {
     await api.patch(`/users/${id}/role`, { role });
-    fetchUsers();
+    await fetchUsers();
   };
 
   return (

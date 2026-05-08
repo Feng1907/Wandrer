@@ -24,8 +24,9 @@ export default function RegisterPage() {
       const { data } = await api.post('/auth/register', { name: form.name, email: form.email, password: form.password });
       setAuth(data.user, data.accessToken);
       router.push('/home');
-    } catch (err: any) {
-      setError(err.response?.data?.message ?? 'Đăng ký thất bại');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Đăng ký thất bại';
+      setError((err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? message);
     } finally {
       setLoading(false);
     }

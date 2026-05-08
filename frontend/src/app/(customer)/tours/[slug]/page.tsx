@@ -23,7 +23,7 @@ export default function TourDetailPage() {
   useEffect(() => {
     api.get(`/tours/${slug}`).then(({ data }) => {
       setTour(data);
-      const primary = data.images?.findIndex((img: any) => img.isPrimary);
+      const primary = data.images?.findIndex((img: { isPrimary: boolean }) => img.isPrimary);
       if (primary > -1) setActiveImage(primary);
     }).catch(() => router.push('/tours')).finally(() => setLoading(false));
   }, [slug]);

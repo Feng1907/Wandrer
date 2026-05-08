@@ -15,6 +15,9 @@
       "Bash(npx shadcn@4.6.0 add button input label card table badge select textarea dialog dropdown-menu separator skeleton)",
       "PowerShell(New-Item -ItemType Directory -Force -Path \"d:/Project/Wandrer/frontend/src/app/\\(customer\\)/home\")",
       "PowerShell(New-Item -ItemType Directory -Force -Path \"d:/Project/Wandrer/frontend/src/app/payment/checkout\")"
+    ],
+    "additionalDirectories": [
+      "d:\\Project\\Wandrer"
     ]
   }
 }

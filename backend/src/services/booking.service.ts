@@ -1,5 +1,5 @@
 import prisma from '../utils/prisma';
-import { Prisma, BookingStatus } from '@prisma/client';
+type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
 
 export interface PassengerInput {
   fullName: string;
@@ -39,11 +39,11 @@ export const createBooking = async (userId: string, dto: CreateBookingDto) => {
     throw new Error('Không đủ chỗ trống cho số lượng hành khách này');
   }
 
-  const unitPrice = departure.priceOverride ?? departure.tour.basePrice;
-  const childPrice = departure.tour.childPrice;
-  let subtotal = new Prisma.Decimal(adults).mul(unitPrice).add(new Prisma.Decimal(children).mul(childPrice));
+  const unitPrice = Number(departure.priceOverride ?? departure.tour.basePrice);
+  const childPrice = Number(departure.tour.childPrice);
+  let subtotal = adults * unitPrice + children * childPrice;
 
-  let discountAmount = new Prisma.Decimal(0);
+  let discountAmount = 0;
   let discountCodeRecord = null;
 
   if (dto.discountCode) {
@@ -53,17 +53,18 @@ export const createBooking = async (userId: string, dto: CreateBookingDto) => {
     if (!discountCodeRecord) throw new Error('Mã giảm giá không hợp lệ hoặc đã hết hạn');
     if (discountCodeRecord.expiresAt && discountCodeRecord.expiresAt < new Date()) throw new Error('Mã giảm giá đã hết hạn');
     if (discountCodeRecord.usageLimit && discountCodeRecord.usedCount >= discountCodeRecord.usageLimit) throw new Error('Mã giảm giá đã hết lượt sử dụng');
-    if (subtotal.lt(discountCodeRecord.minOrderValue)) throw new Error(`Đơn hàng tối thiểu ${discountCodeRecord.minOrderValue.toNumber().toLocaleString('vi-VN')}đ`);
+    const minOrder = Number(discountCodeRecord.minOrderValue);
+    if (subtotal < minOrder) throw new Error(`Đơn hàng tối thiểu ${minOrder.toLocaleString('vi-VN')}đ`);
 
     discountAmount = discountCodeRecord.type === 'PERCENTAGE'
-      ? subtotal.mul(discountCodeRecord.value).div(100)
-      : discountCodeRecord.value;
-    if (discountAmount.gt(subtotal)) discountAmount = subtotal;
+      ? (subtotal * Number(discountCodeRecord.value)) / 100
+      : Number(discountCodeRecord.value);
+    if (discountAmount > subtotal) discountAmount = subtotal;
   }
 
-  const totalPrice = subtotal.sub(discountAmount);
+  const totalPrice = subtotal - discountAmount;
 
-  const booking = await prisma.$transaction(async (tx) => {
+  const booking = await prisma.$transaction(async (tx: typeof prisma) => {
     const b = await tx.booking.create({
       data: {
         userId,

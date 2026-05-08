@@ -4,9 +4,21 @@ import { useEffect, useRef } from 'react';
 import { io, Socket } from 'socket.io-client';
 import { useAuthStore } from '@/store/auth.store';
 
-export const useSocket = (onNotification?: (data: any) => void) => {
+interface NotificationPayload {
+  type: string;
+  title: string;
+  message: string;
+}
+
+export const useSocket = (onNotification?: (data: NotificationPayload) => void) => {
   const socketRef = useRef<Socket | null>(null);
+  const callbackRef = useRef(onNotification);
   const { accessToken } = useAuthStore();
+
+  // Sync latest callback without reconnecting the socket
+  useEffect(() => {
+    callbackRef.current = onNotification;
+  }, [onNotification]);
 
   useEffect(() => {
     if (!accessToken) return;
@@ -16,8 +28,8 @@ export const useSocket = (onNotification?: (data: any) => void) => {
       transports: ['websocket'],
     });
 
-    socketRef.current.on('notification', (data) => {
-      onNotification?.(data);
+    socketRef.current.on('notification', (data: NotificationPayload) => {
+      callbackRef.current?.(data);
     });
 
     return () => {
@@ -25,5 +37,5 @@ export const useSocket = (onNotification?: (data: any) => void) => {
     };
   }, [accessToken]);
 
-  return socketRef.current;
+  return socketRef;
 };

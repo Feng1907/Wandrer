@@ -2,7 +2,6 @@ import crypto from 'crypto';
 import prisma from '../utils/prisma';
 import { emitToUser } from '../utils/socket';
 import { sendBookingConfirmationEmail } from '../utils/email';
-import { Prisma } from '@prisma/client';
 
 // ─── VNPay ───────────────────────────────────────────────────────────────────
 

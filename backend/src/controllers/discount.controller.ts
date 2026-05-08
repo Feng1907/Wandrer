@@ -22,7 +22,7 @@ export const getDiscounts = async (req: Request, res: Response) => {
 
 export const toggleDiscount = async (req: Request, res: Response) => {
   try {
-    const d = await discountService.toggleDiscount(req.params.id);
+    const d = await discountService.toggleDiscount(String(req.params.id));
     res.json(d);
   } catch (err: any) {
     res.status(400).json({ message: err.message });
@@ -31,7 +31,7 @@ export const toggleDiscount = async (req: Request, res: Response) => {
 
 export const deleteDiscount = async (req: Request, res: Response) => {
   try {
-    await discountService.deleteDiscount(req.params.id);
+    await discountService.deleteDiscount(String(req.params.id));
     res.json({ message: 'Xóa thành công' });
   } catch (err: any) {
     res.status(400).json({ message: err.message });

@@ -9,11 +9,14 @@ import { formatCurrency } from '@/lib/utils';
 
 export default function ComparePage() {
   const [tours, setTours] = useState<Tour[]>([]);
-  const [loading, setLoading] = useState(true);
+  const initialIds = typeof window !== 'undefined'
+    ? (JSON.parse(localStorage.getItem('compare') ?? '[]') as string[])
+    : [];
+  const [loading, setLoading] = useState(initialIds.length > 0);
 
   useEffect(() => {
     const ids: string[] = JSON.parse(localStorage.getItem('compare') ?? '[]');
-    if (ids.length === 0) { setLoading(false); return; }
+    if (ids.length === 0) return;
     Promise.all(ids.map((id) => api.get<Tour>(`/tours/${id}`).then((r) => r.data)))
       .then(setTours)
       .finally(() => setLoading(false));
@@ -31,7 +34,7 @@ export default function ComparePage() {
     <div className="mx-auto max-w-2xl px-4 py-20 text-center">
       <p className="text-5xl mb-4">🔍</p>
       <h2 className="text-xl font-bold text-neutral-900 mb-2">Chưa có tour để so sánh</h2>
-      <p className="text-sm text-neutral-500 mb-6">Vào trang chi tiết tour và nhấn "So sánh" để thêm vào đây</p>
+      <p className="text-sm text-neutral-500 mb-6">Vào trang chi tiết tour và nhấn &ldquo;So sánh&rdquo; để thêm vào đây</p>
       <Link href="/tours" className="rounded-xl bg-blue-600 px-6 py-3 text-sm font-medium text-white hover:bg-blue-700">Khám phá Tour</Link>
     </div>
   );

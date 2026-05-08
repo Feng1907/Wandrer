@@ -9,6 +9,18 @@ import { formatCurrency, formatDate } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
 import { BookingStatus } from '@/types';
 
+interface MyBooking {
+  id: string;
+  status: BookingStatus;
+  totalPrice: number;
+  departure: {
+    departureDate: string;
+    tour: { title: string; slug: string; images: { url: string; isPrimary: boolean }[] };
+  };
+  passengers: { id: string }[];
+  payment?: { status: string };
+}
+
 const STATUS_STYLES: Record<BookingStatus, string> = {
   PENDING: 'bg-amber-100 text-amber-700',
   CONFIRMED: 'bg-emerald-100 text-emerald-700',
@@ -23,7 +35,7 @@ const STATUS_LABELS: Record<BookingStatus, string> = {
 export default function MyBookingsPage() {
   const { user } = useAuthStore();
   const router = useRouter();
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<MyBooking[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,7 +64,7 @@ export default function MyBookingsPage() {
         <div className="space-y-4">
           {bookings.map((booking) => {
             const tour = booking.departure?.tour;
-            const primaryImg = tour?.images?.find((img: any) => img.isPrimary) ?? tour?.images?.[0];
+            const primaryImg = tour?.images?.find((img: { url: string; isPrimary: boolean }) => img.isPrimary) ?? tour?.images?.[0];
             return (
               <div key={booking.id} className="overflow-hidden rounded-2xl border border-neutral-200 bg-white">
                 <div className="flex gap-4 p-5">
