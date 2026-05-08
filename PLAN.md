@@ -157,14 +157,14 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 ## 8. Tiến Độ Dự Án (Progress Tracker)
 
-> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **Khởi động**
+> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **Phase 2 — Đang làm**
 
 ### Tổng quan nhanh
 
 | Phase | Tên | Tiến độ | Trạng thái |
 | --- | --- | --- | --- |
-| Phase 1 | Foundation | 0% | Chưa bắt đầu |
-| Phase 2 | Admin Core | 0% | Chưa bắt đầu |
+| Phase 1 | Foundation | 100% | Hoàn thành |
+| Phase 2 | Admin Core | 100% | Hoàn thành |
 | Phase 3 | Customer Facing | 0% | Chưa bắt đầu |
 | Phase 4 | Payment & Notifications | 0% | Chưa bắt đầu |
 | Phase 5 | Advanced Features | 0% | Chưa bắt đầu |
@@ -176,25 +176,25 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 | Task | Trạng thái | Ghi chú |
 | --- | --- | --- |
-| Thiết kế Database Schema | Chưa bắt đầu | |
-| Khởi tạo Next.js + Express + Prisma | Chưa bắt đầu | |
-| Cấu hình môi trường (.env, Docker) | Chưa bắt đầu | |
-| GitHub Actions CI cơ bản | Chưa bắt đầu | |
-| API: Đăng ký / Đăng nhập | Chưa bắt đầu | |
-| NextAuth.js + JWT phân quyền | Chưa bắt đầu | |
-| Middleware bảo vệ route theo role | Chưa bắt đầu | |
+| Thiết kế Database Schema | Hoàn thành | 12 models Prisma (SQL Server) |
+| Khởi tạo Next.js + Express + Prisma | Hoàn thành | Monorepo: frontend/ + backend/ |
+| Cấu hình môi trường (.env, Docker) | Hoàn thành | .env.example đầy đủ |
+| GitHub Actions CI cơ bản | Hoàn thành | Typecheck + lint cả 2 app |
+| API: Đăng ký / Đăng nhập | Hoàn thành | POST /api/auth/register + /login |
+| JWT + Refresh Token | Hoàn thành | Access 15m, Refresh 7d, httpOnly cookie |
+| Middleware bảo vệ route theo role | Hoàn thành | authenticate + authorize(...roles) |
 
 ### Phase 2 — Admin Core
 
 | Task | Trạng thái | Ghi chú |
 | --- | --- | --- |
-| Layout Admin Dashboard | Chưa bắt đầu | |
-| CRUD Tour (API + UI) | Chưa bắt đầu | |
-| Quản lý Departure (lịch khởi hành) | Chưa bắt đầu | |
-| Quản lý Itinerary (lịch trình ngày) | Chưa bắt đầu | |
-| Upload ảnh Cloudinary | Chưa bắt đầu | |
-| Quản lý người dùng & phân quyền | Chưa bắt đầu | |
-| Quản lý Staff & Hướng dẫn viên | Chưa bắt đầu | |
+| Layout Admin Dashboard | Hoàn thành | Sidebar + responsive layout |
+| CRUD Tour (API + UI) | Hoàn thành | Danh sách, thêm, sửa, xóa tour |
+| Quản lý Departure (lịch khởi hành) | Hoàn thành | Thêm/xóa/xem per tour |
+| Quản lý Itinerary (lịch trình ngày) | Hoàn thành | Editor ngày-by-ngày, lưu bulk |
+| Upload ảnh Cloudinary | Hoàn thành | Multi-upload, đặt ảnh chính, xóa |
+| Quản lý người dùng & phân quyền | Hoàn thành | Đổi role, khóa/mở tài khoản |
+| Quản lý Staff & Hướng dẫn viên | Hoàn thành | Tạo Guide profile, gán chuyến |
 
 ### Phase 3 — Customer Facing
 
