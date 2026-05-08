@@ -1,5 +1,8 @@
 import prisma from '../utils/prisma';
+import { PrismaClient } from '../generated/prisma/client';
+
 type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
+type TxClient = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$use' | '$extends'>;
 
 export interface PassengerInput {
   fullName: string;
@@ -64,7 +67,7 @@ export const createBooking = async (userId: string, dto: CreateBookingDto) => {
 
   const totalPrice = subtotal - discountAmount;
 
-  const booking = await prisma.$transaction(async (tx: typeof prisma) => {
+  const booking = await prisma.$transaction(async (tx: TxClient) => {
     const b = await tx.booking.create({
       data: {
         userId,
