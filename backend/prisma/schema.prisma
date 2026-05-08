@@ -1,72 +1,10 @@
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
   provider = "sqlserver"
-  url      = env("DATABASE_URL")
-}
-
-enum Role {
-  CUSTOMER
-  ADMIN
-  STAFF
-  GUIDE
-}
-
-enum TourStatus {
-  DRAFT
-  ACTIVE
-  INACTIVE
-}
-
-enum TourCategory {
-  RESORT
-  ADVENTURE
-  TREKKING
-  MICE
-  CULTURAL
-  CRUISE
-}
-
-enum BookingStatus {
-  PENDING
-  CONFIRMED
-  CANCELLED
-  COMPLETED
-}
-
-enum PaymentStatus {
-  PENDING
-  SUCCESS
-  FAILED
-  REFUNDED
-}
-
-enum PaymentProvider {
-  VNPAY
-  MOMO
-  CASH
-}
-
-enum PassengerType {
-  ADULT
-  CHILD
-  INFANT
-}
-
-enum DiscountType {
-  PERCENTAGE
-  FIXED
-}
-
-enum NotificationType {
-  BOOKING_CONFIRMED
-  BOOKING_CANCELLED
-  PAYMENT_SUCCESS
-  DEPARTURE_REMINDER
-  REVIEW_REQUEST
-  SYSTEM
 }
 
 model User {
@@ -76,7 +14,7 @@ model User {
   password      String?
   phone         String?
   avatar        String?
-  role          Role           @default(CUSTOMER)
+  role          String         @default("CUSTOMER")
   loyaltyPoints Int            @default(0)
   isActive      Boolean        @default(true)
   createdAt     DateTime       @default(now())
@@ -102,8 +40,8 @@ model Tour {
   childPrice   Decimal      @db.Decimal(18, 2)
   duration     Int
   maxCapacity  Int
-  category     TourCategory
-  status       TourStatus   @default(DRAFT)
+  category     String
+  status       String       @default("DRAFT")
   featured     Boolean      @default(false)
   createdAt    DateTime     @default(now())
   updatedAt    DateTime     @updatedAt
@@ -127,15 +65,15 @@ model TourImage {
 }
 
 model Itinerary {
-  id            String @id @default(cuid())
+  id            String  @id @default(cuid())
   tourId        String
   day           Int
   title         String
-  description   String @db.NVarChar(Max)
+  description   String  @db.NVarChar(Max)
   meals         String
   accommodation String?
 
-  tour          Tour   @relation(fields: [tourId], references: [id], onDelete: Cascade)
+  tour          Tour    @relation(fields: [tourId], references: [id], onDelete: Cascade)
 }
 
 model Departure {
@@ -154,20 +92,20 @@ model Departure {
 }
 
 model Booking {
-  id              String        @id @default(cuid())
+  id              String    @id @default(cuid())
   userId          String
   departureId     String
-  subtotal        Decimal       @db.Decimal(18, 2)
-  discountAmount  Decimal       @db.Decimal(18, 2) @default(0)
-  totalPrice      Decimal       @db.Decimal(18, 2)
-  status          BookingStatus @default(PENDING)
-  specialRequests String?       @db.NVarChar(Max)
+  subtotal        Decimal   @db.Decimal(18, 2)
+  discountAmount  Decimal   @db.Decimal(18, 2) @default(0)
+  totalPrice      Decimal   @db.Decimal(18, 2)
+  status          String    @default("PENDING")
+  specialRequests String?   @db.NVarChar(Max)
   contactName     String
   contactEmail    String
   contactPhone    String
   discountCodeId  String?
-  createdAt       DateTime      @default(now())
-  updatedAt       DateTime      @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   user         User               @relation(fields: [userId], references: [id])
   departure    Departure          @relation(fields: [departureId], references: [id])
@@ -177,27 +115,27 @@ model Booking {
 }
 
 model BookingPassenger {
-  id        String        @id @default(cuid())
+  id        String    @id @default(cuid())
   bookingId String
   fullName  String
   dob       DateTime?
   idNumber  String?
-  type      PassengerType @default(ADULT)
+  type      String    @default("ADULT")
 
-  booking   Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  booking   Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model Payment {
-  id            String          @id @default(cuid())
-  bookingId     String          @unique
-  amount        Decimal         @db.Decimal(18, 2)
-  provider      PaymentProvider
+  id            String    @id @default(cuid())
+  bookingId     String    @unique
+  amount        Decimal   @db.Decimal(18, 2)
+  provider      String
   transactionId String?
-  status        PaymentStatus   @default(PENDING)
+  status        String    @default("PENDING")
   paidAt        DateTime?
-  createdAt     DateTime        @default(now())
+  createdAt     DateTime  @default(now())
 
-  booking       Booking         @relation(fields: [bookingId], references: [id])
+  booking       Booking   @relation(fields: [bookingId], references: [id])
 }
 
 model Review {
@@ -227,16 +165,16 @@ model Wishlist {
 }
 
 model DiscountCode {
-  id            String       @id @default(cuid())
-  code          String       @unique
-  type          DiscountType
-  value         Decimal      @db.Decimal(18, 2)
-  minOrderValue Decimal      @db.Decimal(18, 2) @default(0)
+  id            String    @id @default(cuid())
+  code          String    @unique
+  type          String
+  value         Decimal   @db.Decimal(18, 2)
+  minOrderValue Decimal   @db.Decimal(18, 2) @default(0)
   usageLimit    Int?
-  usedCount     Int          @default(0)
+  usedCount     Int       @default(0)
   expiresAt     DateTime?
-  isActive      Boolean      @default(true)
-  createdAt     DateTime     @default(now())
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
 
   bookings      Booking[]
 }
@@ -266,13 +204,13 @@ model GuideAssignment {
 }
 
 model Notification {
-  id        String           @id @default(cuid())
+  id        String   @id @default(cuid())
   userId    String
-  type      NotificationType
+  type      String
   title     String
-  message   String           @db.NVarChar(Max)
-  isRead    Boolean          @default(false)
-  createdAt DateTime         @default(now())
+  message   String   @db.NVarChar(Max)
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
 
-  user      User             @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }
