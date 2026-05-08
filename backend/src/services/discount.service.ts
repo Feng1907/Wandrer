@@ -1,5 +1,5 @@
 import prisma from '../utils/prisma';
-import { DiscountType, Prisma } from '@prisma/client';
+type DiscountType = 'PERCENTAGE' | 'FIXED';
 
 export interface CreateDiscountDto {
   code: string;
@@ -18,8 +18,8 @@ export const createDiscount = async (dto: CreateDiscountDto) => {
     data: {
       code: dto.code.toUpperCase(),
       type: dto.type,
-      value: new Prisma.Decimal(dto.value),
-      minOrderValue: dto.minOrderValue ? new Prisma.Decimal(dto.minOrderValue) : 0,
+      value: Number(dto.value),
+      minOrderValue: dto.minOrderValue ? Number(dto.minOrderValue) : 0,
       usageLimit: dto.usageLimit,
       expiresAt: dto.expiresAt ? new Date(dto.expiresAt) : undefined,
     },

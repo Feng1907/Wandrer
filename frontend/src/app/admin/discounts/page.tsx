@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Plus, Trash2, ToggleLeft, ToggleRight } from 'lucide-react';
 import api from '@/lib/axios';
 import { formatCurrency, formatDate } from '@/lib/utils';
@@ -27,7 +27,7 @@ export default function DiscountsPage() {
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState({ code: '', type: 'PERCENTAGE', value: '', minOrderValue: '', usageLimit: '', expiresAt: '' });
 
-  const fetch = async () => {
+  const loadDiscounts = useCallback(async () => {
     setLoading(true);
     try {
       const { data } = await api.get('/discounts');
@@ -36,9 +36,10 @@ export default function DiscountsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
-  useEffect(() => { fetch(); }, []);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { loadDiscounts(); }, [loadDiscounts]);
 
   const handleCreate = async () => {
     try {
@@ -52,21 +53,21 @@ export default function DiscountsPage() {
       });
       setShowForm(false);
       setForm({ code: '', type: 'PERCENTAGE', value: '', minOrderValue: '', usageLimit: '', expiresAt: '' });
-      fetch();
-    } catch (e: any) {
-      alert(e.response?.data?.message ?? 'Lỗi');
+      await loadDiscounts();
+    } catch (e) {
+      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi');
     }
   };
 
   const handleToggle = async (id: string) => {
     await api.patch(`/discounts/${id}/toggle`);
-    fetch();
+    await loadDiscounts();
   };
 
   const handleDelete = async (id: string) => {
     if (!confirm('Xóa mã giảm giá này?')) return;
     await api.delete(`/discounts/${id}`);
-    fetch();
+    await loadDiscounts();
   };
 
   return (

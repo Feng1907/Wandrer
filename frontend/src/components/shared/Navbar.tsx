@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { Compass, Heart, User, LogOut, LayoutDashboard, Menu, X } from 'lucide-react';
 import { useState } from 'react';
 import { useAuthStore } from '@/store/auth.store';
-import { cn } from '@/lib/utils';
 import NotificationBell from './NotificationBell';
 
 export default function Navbar() {

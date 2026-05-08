@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useForm } from 'react-hook-form';
+import { useForm, type Resolver } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Upload, Trash2, Star } from 'lucide-react';
@@ -17,10 +17,10 @@ const tourSchema = z.object({
   includes: z.string().min(1, 'Không được để trống'),
   excludes: z.string().min(1, 'Không được để trống'),
   cancelPolicy: z.string().min(1, 'Không được để trống'),
-  basePrice: z.coerce.number().positive('Giá phải > 0'),
-  childPrice: z.coerce.number().positive('Giá phải > 0'),
-  duration: z.coerce.number().int().positive('Số ngày phải > 0'),
-  maxCapacity: z.coerce.number().int().positive('Số chỗ phải > 0'),
+  basePrice: z.preprocess((v) => Number(v), z.number().positive('Giá phải > 0')),
+  childPrice: z.preprocess((v) => Number(v), z.number().positive('Giá phải > 0')),
+  duration: z.preprocess((v) => Number(v), z.number().int().positive('Số ngày phải > 0')),
+  maxCapacity: z.preprocess((v) => Number(v), z.number().int().positive('Số chỗ phải > 0')),
   category: z.enum(['RESORT', 'ADVENTURE', 'TREKKING', 'MICE', 'CULTURAL', 'CRUISE']),
   status: z.enum(['DRAFT', 'ACTIVE', 'INACTIVE']),
   featured: z.boolean(),
@@ -43,6 +43,18 @@ const STATUSES: { value: TourStatus; label: string }[] = [
   { value: 'INACTIVE', label: 'Tạm dừng' },
 ];
 
+const inputCls = 'w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100';
+
+function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+  return (
+    <div>
+      <label className="mb-1 block text-sm font-medium text-neutral-700">{label}</label>
+      {children}
+      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
+    </div>
+  );
+}
+
 export default function TourFormPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
@@ -55,7 +67,7 @@ export default function TourFormPage() {
   const [tab, setTab] = useState<'info' | 'images' | 'itinerary' | 'departures'>('info');
 
   const { register, handleSubmit, reset, formState: { errors } } = useForm<TourForm>({
-    resolver: zodResolver(tourSchema),
+    resolver: zodResolver(tourSchema) as Resolver<TourForm>,
     defaultValues: { status: 'DRAFT', featured: false, category: 'RESORT' },
   });
 
@@ -94,8 +106,8 @@ export default function TourFormPage() {
         await api.patch(`/tours/${id}`, values);
         alert('Lưu thành công!');
       }
-    } catch (e: any) {
-      alert(e.response?.data?.message ?? 'Có lỗi xảy ra');
+    } catch (e) {
+      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Có lỗi xảy ra');
     } finally {
       setSaving(false);
     }
@@ -122,15 +134,7 @@ export default function TourFormPage() {
     setTour((prev) => prev ? { ...prev, images: prev.images.map((img) => ({ ...img, isPrimary: img.id === imageId })) } : prev);
   };
 
-  const Field = ({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) => (
-    <div>
-      <label className="mb-1 block text-sm font-medium text-neutral-700">{label}</label>
-      {children}
-      {error && <p className="mt-1 text-xs text-red-500">{error}</p>}
-    </div>
-  );
 
-  const inputCls = 'w-full rounded-lg border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100';
 
   return (
     <div>
@@ -371,8 +375,8 @@ function DepartureManager({
       onChange([...departures, data]);
       setShowForm(false);
       setForm({ departureDate: '', returnDate: '', availableSlots: 20, priceOverride: '' });
-    } catch (e: any) {
-      alert(e.response?.data?.message ?? 'Lỗi');
+    } catch (e) {
+      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi');
     }
   };
 

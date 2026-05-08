@@ -23,8 +23,8 @@ export default function LoginPage() {
       const { data } = await api.post('/auth/login', { email, password });
       setAuth(data.user, data.accessToken);
       router.push(data.user.role === 'ADMIN' || data.user.role === 'STAFF' ? '/admin' : '/home');
-    } catch (err: any) {
-      setError(err.response?.data?.message ?? 'Đăng nhập thất bại');
+    } catch (err) {
+      setError((err as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Đăng nhập thất bại');
     } finally {
       setLoading(false);
     }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { CreditCard, Smartphone } from 'lucide-react';
 import api from '@/lib/axios';
 
@@ -12,7 +12,6 @@ const METHODS = [
 
 export default function CheckoutPage() {
   const params = useSearchParams();
-  const router = useRouter();
   const bookingId = params.get('bookingId') ?? '';
   const amount = Number(params.get('amount') ?? 0);
 
@@ -24,13 +23,13 @@ export default function CheckoutPage() {
     try {
       if (method === 'vnpay') {
         const { data } = await api.post('/payment/vnpay/create', { bookingId, amount });
-        window.location.href = data.payUrl;
+        window.location.assign(data.payUrl);
       } else {
         const { data } = await api.post('/payment/momo/create', { bookingId, amount });
-        window.location.href = data.payUrl;
+        window.location.assign(data.payUrl);
       }
-    } catch (e: any) {
-      alert(e.response?.data?.message ?? 'Lỗi khi tạo link thanh toán');
+    } catch (e) {
+      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi khi tạo link thanh toán');
       setLoading(false);
     }
   };

@@ -1,9 +1,18 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { formatCurrency, formatDate } from '@/lib/utils';
 import api from '@/lib/axios';
 import { BookingStatus } from '@/types';
+
+interface AdminBooking {
+  id: string;
+  status: BookingStatus;
+  totalPrice: number;
+  user: { name: string; email: string };
+  departure: { departureDate: string; tour: { title: string } };
+  payment?: { status: string };
+}
 
 const STATUS_STYLES: Record<BookingStatus, string> = {
   PENDING: 'bg-amber-100 text-amber-700',
@@ -17,13 +26,13 @@ const STATUS_LABELS: Record<BookingStatus, string> = {
 };
 
 export default function AdminBookingsPage() {
-  const [bookings, setBookings] = useState<any[]>([]);
+  const [bookings, setBookings] = useState<AdminBooking[]>([]);
   const [total, setTotal] = useState(0);
   const [page, setPage] = useState(1);
   const [statusFilter, setStatusFilter] = useState<BookingStatus | ''>('');
   const [loading, setLoading] = useState(true);
 
-  const fetchBookings = async () => {
+  const fetchBookings = useCallback(async () => {
     setLoading(true);
     try {
       const { data } = await api.get('/bookings', { params: { page, limit: 15, status: statusFilter || undefined } });
@@ -32,13 +41,14 @@ export default function AdminBookingsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, statusFilter]);
 
-  useEffect(() => { fetchBookings(); }, [page, statusFilter]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchBookings(); }, [fetchBookings]);
 
   const handleStatusChange = async (id: string, status: BookingStatus) => {
     await api.patch(`/bookings/${id}/status`, { status });
-    fetchBookings();
+    await fetchBookings();
   };
 
   return (

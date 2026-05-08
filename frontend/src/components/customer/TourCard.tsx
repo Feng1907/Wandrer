@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { Heart, Clock, Users, Star } from 'lucide-react';
 import { Tour } from '@/types';
 import { formatCurrency, cn } from '@/lib/utils';
@@ -41,11 +42,13 @@ export default function TourCard({ tour, isSaved = false, onWishlistChange }: Pr
 
   return (
     <Link href={`/tours/${tour.slug}`} className="group block overflow-hidden rounded-2xl border border-neutral-200 bg-white transition-shadow hover:shadow-md">
-      <div className="relative overflow-hidden">
-        <img
+      <div className="relative h-48 overflow-hidden">
+        <Image
           src={primaryImage?.url ?? '/placeholder-tour.jpg'}
           alt={tour.title}
-          className="h-48 w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          fill
+          className="object-cover transition-transform duration-300 group-hover:scale-105"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
         />
         <div className="absolute left-3 top-3">
           <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-medium text-neutral-700 backdrop-blur">

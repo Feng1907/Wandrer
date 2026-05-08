@@ -1,7 +1,9 @@
 import slugify from 'slugify';
 import prisma from '../utils/prisma';
 import { uploadImage, deleteImage } from '../utils/cloudinary';
-import { TourCategory, TourStatus, Prisma } from '@prisma/client';
+
+type TourCategory = 'RESORT' | 'ADVENTURE' | 'TREKKING' | 'MICE' | 'CULTURAL' | 'CRUISE';
+type TourStatus = 'DRAFT' | 'ACTIVE' | 'INACTIVE';
 
 export interface CreateTourDto {
   title: string;
@@ -42,8 +44,8 @@ export const createTour = async (dto: CreateTourDto) => {
     data: {
       ...dto,
       slug,
-      basePrice: new Prisma.Decimal(dto.basePrice),
-      childPrice: new Prisma.Decimal(dto.childPrice),
+      basePrice: dto.basePrice,
+      childPrice: dto.childPrice,
     },
     include: { images: true },
   });
@@ -60,8 +62,8 @@ export const updateTour = async (id: string, dto: Partial<CreateTourDto>) => {
     data: {
       ...dto,
       ...(slug ? { slug } : {}),
-      ...(dto.basePrice !== undefined ? { basePrice: new Prisma.Decimal(dto.basePrice) } : {}),
-      ...(dto.childPrice !== undefined ? { childPrice: new Prisma.Decimal(dto.childPrice) } : {}),
+      ...(dto.basePrice !== undefined ? { basePrice: dto.basePrice } : {}),
+      ...(dto.childPrice !== undefined ? { childPrice: dto.childPrice } : {}),
     },
     include: { images: true, itineraries: { orderBy: { day: 'asc' } } },
   });
@@ -71,7 +73,7 @@ export const deleteTour = async (id: string) => {
   const tour = await prisma.tour.findUnique({ where: { id }, include: { images: true } });
   if (!tour) throw new Error('Tour không tồn tại');
 
-  await Promise.all(tour.images.map((img) => deleteImage(img.publicId)));
+  await Promise.all(tour.images.map((img: { publicId: string }) => deleteImage(img.publicId)));
   await prisma.tour.delete({ where: { id } });
 };
 
@@ -79,7 +81,7 @@ export const getTours = async (query: TourQuery) => {
   const { page = 1, limit = 10, category, status, search, featured } = query;
   const skip = (page - 1) * limit;
 
-  const where: Prisma.TourWhereInput = {
+  const where: Record<string, unknown> = {
     ...(category ? { category } : {}),
     ...(status ? { status } : {}),
     ...(featured !== undefined ? { featured } : {}),

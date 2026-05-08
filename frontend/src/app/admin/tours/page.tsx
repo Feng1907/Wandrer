@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Plus, Pencil, Trash2, Search } from 'lucide-react';
 import api from '@/lib/axios';
@@ -25,7 +25,7 @@ export default function ToursPage() {
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
 
-  const fetchTours = async () => {
+  const fetchTours = useCallback(async () => {
     setLoading(true);
     try {
       const { data } = await api.get('/tours', { params: { page, limit: 10, search: search || undefined } });
@@ -34,14 +34,15 @@ export default function ToursPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [page, search]);
 
-  useEffect(() => { fetchTours(); }, [page, search]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { fetchTours(); }, [fetchTours]);
 
   const handleDelete = async (id: string) => {
     if (!confirm('Xóa tour này?')) return;
     await api.delete(`/tours/${id}`);
-    fetchTours();
+    await fetchTours();
   };
 
   return (
