@@ -17,7 +17,8 @@
       "PowerShell(New-Item -ItemType Directory -Force -Path \"d:/Project/Wandrer/frontend/src/app/payment/checkout\")",
       "Bash(npx tsc *)",
       "Bash(node_modules/.bin/tsc --noEmit)",
-      "Bash(git rm *)"
+      "Bash(git rm *)",
+      "Bash(wait)"
     ],
     "additionalDirectories": [
       "d:\\Project\\Wandrer"

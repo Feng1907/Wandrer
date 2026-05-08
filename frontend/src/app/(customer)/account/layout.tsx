@@ -2,13 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { User, ShoppingBag, Heart } from 'lucide-react';
+import { User, ShoppingBag, Heart, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const tabs = [
   { href: '/account', label: 'Tài khoản', icon: User },
   { href: '/account/bookings', label: 'Đặt tour', icon: ShoppingBag },
   { href: '/account/wishlist', label: 'Yêu thích', icon: Heart },
+  { href: '/account/loyalty', label: 'Điểm thưởng', icon: Star },
 ];
 
 export default function AccountLayout({ children }: { children: React.ReactNode }) {
@@ -16,7 +17,7 @@ export default function AccountLayout({ children }: { children: React.ReactNode 
   return (
     <div className="mx-auto max-w-5xl px-4 py-10">
       <div className="flex gap-8">
-        <aside className="w-48 shrink-0">
+        <aside className="w-52 shrink-0">
           <nav className="space-y-1">
             {tabs.map(({ href, label, icon: Icon }) => (
               <Link
