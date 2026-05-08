@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { Clock, Users, MapPin, CheckCircle, XCircle, ChevronDown, ChevronUp, Heart, Share2, GitCompare } from 'lucide-react';
+import { Clock, Users, CheckCircle, XCircle, ChevronDown, ChevronUp, Heart, GitCompare } from 'lucide-react';
+import ReviewSection from '@/components/customer/ReviewSection';
 import api from '@/lib/axios';
 import { Tour, Departure } from '@/types';
 import { formatCurrency, formatDate } from '@/lib/utils';
@@ -148,6 +149,8 @@ export default function TourDetailPage() {
             <h2 className="mb-3 text-lg font-bold text-neutral-900">Chính sách hoàn hủy</h2>
             <p className="rounded-xl bg-neutral-50 p-4 text-sm leading-relaxed text-neutral-600 whitespace-pre-line">{tour.cancelPolicy}</p>
           </section>
+
+          <ReviewSection tourId={tour.id} />
         </div>
 
         {/* Right: booking sidebar */}
