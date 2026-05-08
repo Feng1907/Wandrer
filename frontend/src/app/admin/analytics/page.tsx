@@ -3,13 +3,29 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
 import { TrendingUp, Users, Map, ShoppingBag, Clock } from 'lucide-react';
 import api from '@/lib/axios';
 import { formatCurrency } from '@/lib/utils';
 
 const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'];
+
+function StatCard({ label, value, icon: Icon, color }: { label: string; value: string | number; icon: React.ElementType; color: string }) {
+  return (
+    <div className="rounded-2xl border border-neutral-200 bg-white p-6">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-sm text-neutral-500">{label}</p>
+          <p className="mt-1 text-2xl font-bold text-neutral-900">{value}</p>
+        </div>
+        <div className={`rounded-xl p-3 ${color}`}>
+          <Icon className="h-5 w-5 text-white" />
+        </div>
+      </div>
+    </div>
+  );
+}
 
 interface Stats {
   totalTours: number;
@@ -51,19 +67,7 @@ export default function AnalyticsPage() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { load(); }, [load]);
 
-  const StatCard = ({ label, value, icon: Icon, color }: { label: string; value: string | number; icon: React.ElementType; color: string }) => (
-    <div className="rounded-2xl border border-neutral-200 bg-white p-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <p className="text-sm text-neutral-500">{label}</p>
-          <p className="mt-1 text-2xl font-bold text-neutral-900">{value}</p>
-        </div>
-        <div className={`rounded-xl p-3 ${color}`}>
-          <Icon className="h-5 w-5 text-white" />
-        </div>
-      </div>
-    </div>
-  );
+
 
   return (
     <div>
@@ -110,7 +114,7 @@ export default function AnalyticsPage() {
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="label" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} tickFormatter={(v) => `${(v / 1e6).toFixed(0)}M`} />
-              <Tooltip formatter={(v: number) => formatCurrency(v)} />
+              <Tooltip formatter={(v) => formatCurrency(Number(v))} />
               <Area type="monotone" dataKey="revenue" stroke="#3b82f6" fill="url(#colorRevenue)" strokeWidth={2} name="Doanh thu" />
             </AreaChart>
           </ResponsiveContainer>
@@ -121,7 +125,7 @@ export default function AnalyticsPage() {
           <h2 className="mb-4 font-semibold text-neutral-900">Trạng thái booking</h2>
           <ResponsiveContainer width="100%" height={200}>
             <PieChart>
-              <Pie data={statusBreakdown} dataKey="count" nameKey="status" cx="50%" cy="50%" outerRadius={80} label={({ status, percent }) => `${STATUS_LABEL[status] ?? status} ${(percent * 100).toFixed(0)}%`} labelLine={false}>
+              <Pie data={statusBreakdown} dataKey="count" nameKey="status" cx="50%" cy="50%" outerRadius={80} label={({ name, percent }: { name?: string; percent?: number }) => `${STATUS_LABEL[name ?? ''] ?? name} ${((percent ?? 0) * 100).toFixed(0)}%`} labelLine={false}>
                 {statusBreakdown.map((_, i) => <Cell key={i} fill={COLORS[i % COLORS.length]} />)}
               </Pie>
               <Tooltip formatter={(v, name) => [v, STATUS_LABEL[String(name)] ?? name]} />

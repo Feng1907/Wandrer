@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useForm, type Resolver } from 'react-hook-form';
 import { z } from 'zod';
@@ -94,7 +95,7 @@ export default function TourFormPage() {
         });
       });
     }
-  }, [id]);
+  }, [id, isNew, reset]);
 
   const onSubmit = async (values: TourForm) => {
     setSaving(true);
@@ -238,8 +239,8 @@ export default function TourFormPage() {
           </div>
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4">
             {tour.images.map((img) => (
-              <div key={img.id} className="group relative overflow-hidden rounded-lg border border-neutral-200">
-                <img src={img.url} alt="" className="h-32 w-full object-cover" />
+              <div key={img.id} className="group relative h-32 overflow-hidden rounded-lg border border-neutral-200">
+                <Image src={img.url} alt="" fill className="object-cover" sizes="(max-width: 640px) 50vw, 25vw" />
                 {img.isPrimary && (
                   <span className="absolute left-2 top-2 flex items-center gap-1 rounded bg-amber-400 px-1.5 py-0.5 text-xs font-medium text-white">
                     <Star className="h-3 w-3" /> Chính
