@@ -21,7 +21,8 @@
       "Bash(wait)"
     ],
     "additionalDirectories": [
-      "d:\\Project\\Wandrer"
+      "d:\\Project\\Wandrer",
+      "d:\\Project\\Wandrer\\frontend\\src\\app\\(customer)\\tours\\[slug]"
     ]
   }
 }

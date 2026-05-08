@@ -3,6 +3,8 @@ import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './utils/swagger';
 import authRoutes from './routes/auth.routes';
 import tourRoutes from './routes/tour.routes';
 import userRoutes from './routes/user.routes';
@@ -36,6 +38,9 @@ app.use('/api/discounts', discountRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/loyalty', loyaltyRoutes);
+
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customSiteTitle: 'Wandrer API Docs' }));
+app.get('/api/docs-json', (_req, res) => res.json(swaggerSpec));
 
 app.get('/api/health', (_req, res) => {
   res.json({ status: 'ok', timestamp: new Date().toISOString() });

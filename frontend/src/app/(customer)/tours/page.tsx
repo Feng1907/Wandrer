@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import { SlidersHorizontal, X } from 'lucide-react';
 import TourCard from '@/components/customer/TourCard';
 import api from '@/lib/axios';
@@ -26,7 +26,6 @@ const DURATIONS = [
 
 export default function ToursPage() {
   const searchParams = useSearchParams();
-  const router = useRouter();
 
   const [tours, setTours] = useState<Tour[]>([]);
   const [total, setTotal] = useState(0);
