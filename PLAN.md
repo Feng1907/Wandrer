@@ -157,7 +157,7 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 ## 8. Tiến Độ Dự Án (Progress Tracker)
 
-> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **Phase 2 — Đang làm**
+> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **Phase 3 hoàn thành — Đang chuẩn bị Phase 4**
 
 ### Tổng quan nhanh
 
@@ -165,7 +165,7 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 | --- | --- | --- | --- |
 | Phase 1 | Foundation | 100% | Hoàn thành |
 | Phase 2 | Admin Core | 100% | Hoàn thành |
-| Phase 3 | Customer Facing | 0% | Chưa bắt đầu |
+| Phase 3 | Customer Facing | 100% | Hoàn thành |
 | Phase 4 | Payment & Notifications | 0% | Chưa bắt đầu |
 | Phase 5 | Advanced Features | 0% | Chưa bắt đầu |
 | Phase 6 | Polish & Deploy | 0% | Chưa bắt đầu |
@@ -200,13 +200,13 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 | Task | Trạng thái | Ghi chú |
 | --- | --- | --- |
-| Trang chủ (Hero, hot deals, destinations) | Chưa bắt đầu | |
-| Trang danh sách tour + bộ lọc | Chưa bắt đầu | |
-| Trang chi tiết tour | Chưa bắt đầu | |
-| So sánh tour | Chưa bắt đầu | |
-| Booking Flow (3 bước) | Chưa bắt đầu | |
-| Trang tài khoản & lịch sử đặt tour | Chưa bắt đầu | |
-| Wishlist | Chưa bắt đầu | |
+| Trang chủ (Hero, hot deals, destinations) | Hoàn thành | Hero search, điểm đến, tour nổi bật |
+| Trang danh sách tour + bộ lọc | Hoàn thành | Lọc category, search, featured, phân trang |
+| Trang chi tiết tour | Hoàn thành | Gallery, itinerary accordion, booking sidebar, wishlist |
+| So sánh tour | Hoàn thành | So sánh tối đa 3 tour, lưu localStorage |
+| Booking Flow (3 bước) | Hoàn thành | Hành khách → Liên hệ → Xác nhận |
+| Trang tài khoản & lịch sử đặt tour | Hoàn thành | Thông tin, booking list, hủy booking |
+| Wishlist | Hoàn thành | Toggle save, trang danh sách yêu thích |
 
 ### Phase 4 — Payment & Notifications
 

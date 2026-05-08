@@ -12,7 +12,8 @@
       "Bash(npx shadcn@latest init --yes --base-color neutral)",
       "Bash(npx shadcn@latest init --yes)",
       "Bash(npx shadcn@latest add button input label card table badge select textarea dialog dropdown-menu sidebar separator skeleton toast)",
-      "Bash(npx shadcn@4.6.0 add button input label card table badge select textarea dialog dropdown-menu separator skeleton)"
+      "Bash(npx shadcn@4.6.0 add button input label card table badge select textarea dialog dropdown-menu separator skeleton)",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"d:/Project/Wandrer/frontend/src/app/\\(customer\\)/home\")"
     ]
   }
 }
