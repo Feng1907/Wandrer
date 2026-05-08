@@ -157,7 +157,7 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 ## 8. Tiến Độ Dự Án (Progress Tracker)
 
-> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **Phase 3 hoàn thành — Đang chuẩn bị Phase 4**
+> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **Phase 4 hoàn thành — Đang chuẩn bị Phase 5**
 
 ### Tổng quan nhanh
 
@@ -166,7 +166,7 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 | Phase 1 | Foundation | 100% | Hoàn thành |
 | Phase 2 | Admin Core | 100% | Hoàn thành |
 | Phase 3 | Customer Facing | 100% | Hoàn thành |
-| Phase 4 | Payment & Notifications | 0% | Chưa bắt đầu |
+| Phase 4 | Payment & Notifications | 100% | Hoàn thành |
 | Phase 5 | Advanced Features | 0% | Chưa bắt đầu |
 | Phase 6 | Polish & Deploy | 0% | Chưa bắt đầu |
 
@@ -212,12 +212,12 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 | Task | Trạng thái | Ghi chú |
 | --- | --- | --- |
-| Tích hợp VNPay | Chưa bắt đầu | |
-| Tích hợp Momo | Chưa bắt đầu | |
-| Email xác nhận booking (Nodemailer) | Chưa bắt đầu | |
-| Tạo E-ticket PDF | Chưa bắt đầu | |
-| Real-time notifications (Socket.io) | Chưa bắt đầu | |
-| Quản lý Discount Code (Admin + áp dụng) | Chưa bắt đầu | |
+| Tích hợp VNPay | Hoàn thành | Sandbox, HMAC-SHA512, redirect flow |
+| Tích hợp Momo | Hoàn thành | Sandbox ATM, IPN + redirect |
+| Email xác nhận booking (Nodemailer) | Hoàn thành | HTML email đẹp, gửi tự động sau thanh toán |
+| Tạo E-ticket PDF | Tạm hoãn | Chuyển sang Phase 6 (polish) |
+| Real-time notifications (Socket.io) | Hoàn thành | useSocket hook + NotificationBell UI |
+| Quản lý Discount Code (Admin + áp dụng) | Hoàn thành | CRUD, toggle active, validate tại checkout |
 
 ### Phase 5 — Advanced Features
 

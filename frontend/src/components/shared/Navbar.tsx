@@ -6,6 +6,7 @@ import { Compass, Heart, User, LogOut, LayoutDashboard, Menu, X } from 'lucide-r
 import { useState } from 'react';
 import { useAuthStore } from '@/store/auth.store';
 import { cn } from '@/lib/utils';
+import NotificationBell from './NotificationBell';
 
 export default function Navbar() {
   const { user, logout } = useAuthStore();
@@ -37,6 +38,7 @@ export default function Navbar() {
               <Link href="/account/wishlist" className="rounded-lg p-2 hover:bg-neutral-100 text-neutral-600">
                 <Heart className="h-5 w-5" />
               </Link>
+              <NotificationBell />
               <div className="relative">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}

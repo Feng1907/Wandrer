@@ -2,14 +2,14 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Map, CalendarDays, Users, Tag, BarChart2, LogOut, Compass } from 'lucide-react';
+import { LayoutDashboard, Map, ShoppingBag, Users, Tag, BarChart2, LogOut, Compass } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/admin/tours', label: 'Quản lý Tour', icon: Map },
-  { href: '/admin/departures', label: 'Lịch khởi hành', icon: CalendarDays },
+  { href: '/admin/bookings', label: 'Đơn hàng', icon: ShoppingBag },
   { href: '/admin/users', label: 'Người dùng', icon: Users },
   { href: '/admin/discounts', label: 'Khuyến mãi', icon: Tag },
   { href: '/admin/analytics', label: 'Thống kê', icon: BarChart2 },
