@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git checkout *)",
+      "Bash(npx create-next-app@latest frontend --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-turbopack)",
+      "Bash(mkdir d:/Project/Wandrer/backend)",
+      "Bash(npm init *)",
+      "Bash(npx prisma *)",
+      "Bash(New-Item -ItemType Directory -Force -Path \"d:/Project/Wandrer/.github/workflows\")",
+      "Bash(Out-Null)",
+      "PowerShell(New-Item -ItemType Directory -Force -Path \"d:/Project/Wandrer/.github/workflows\")"
+    ]
+  }
+}
