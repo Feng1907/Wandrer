@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Plus, Pencil, Trash2, Search } from 'lucide-react';
 import api from '@/lib/axios';
 import { Tour, TourCategory, TourStatus } from '@/types';
@@ -94,7 +95,9 @@ export default function ToursPage() {
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     {tour.images[0] && (
-                      <img src={tour.images[0].url} alt={tour.title} className="h-10 w-14 rounded object-cover" />
+                      <div className="relative h-10 w-14 shrink-0 overflow-hidden rounded">
+                        <Image src={tour.images[0].url} alt={tour.title} fill className="object-cover" sizes="56px" />
+                      </div>
                     )}
                     <div>
                       <p className="font-medium text-neutral-900 line-clamp-1">{tour.title}</p>
