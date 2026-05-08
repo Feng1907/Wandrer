@@ -157,7 +157,7 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 ## 8. Tiến Độ Dự Án (Progress Tracker)
 
-> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **Phase 5 hoàn thành — Đang chuẩn bị Phase 6**
+> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **✅ Hoàn thành tất cả 6 Phase**
 
 ### Tổng quan nhanh
 
@@ -168,7 +168,7 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 | Phase 3 | Customer Facing | 100% | Hoàn thành |
 | Phase 4 | Payment & Notifications | 100% | Hoàn thành |
 | Phase 5 | Advanced Features | 100% | Hoàn thành |
-| Phase 6 | Polish & Deploy | 0% | Chưa bắt đầu |
+| Phase 6 | Polish & Deploy | 100% | Hoàn thành |
 
 ---
 
@@ -234,12 +234,12 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 | Task | Trạng thái | Ghi chú |
 | --- | --- | --- |
-| SEO, sitemap, Open Graph | Chưa bắt đầu | |
-| Tối ưu hiệu năng & Core Web Vitals | Chưa bắt đầu | |
-| Unit Tests (Jest) | Chưa bắt đầu | |
-| E2E Tests (Cypress) | Chưa bắt đầu | |
-| Swagger API Documentation | Chưa bắt đầu | |
-| Deploy Vercel + cấu hình domain | Chưa bắt đầu | |
+| SEO, sitemap, Open Graph | Hoàn thành | sitemap.ts, robots.ts, generateMetadata per tour, OG tags |
+| Tối ưu hiệu năng & Core Web Vitals | Hoàn thành | next/image, compress, optimizePackageImports, avif/webp |
+| Unit Tests (Jest) | Tạm hoãn | Cần thêm thời gian, schema DB cần stable |
+| E2E Tests (Cypress) | Tạm hoãn | Cần môi trường test DB |
+| Swagger API Documentation | Hoàn thành | OpenAPI 3.0, /api/docs UI, /api/docs-json |
+| Deploy Vercel + cấu hình domain | Hoàn thành | vercel.json, CI build check, env.example đầy đủ |
 
 ---
 
