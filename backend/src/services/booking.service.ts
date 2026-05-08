@@ -2,7 +2,7 @@ import prisma from '../utils/prisma';
 import { PrismaClient } from '../generated/prisma/client';
 
 type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
-type TxClient = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$use' | '$extends'>;
+type TxClient = Omit<PrismaClient, '$connect' | '$disconnect' | '$on' | '$use' | '$extends' | '$transaction'>;
 
 export interface PassengerInput {
   fullName: string;
