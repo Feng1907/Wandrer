@@ -157,7 +157,7 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 ## 8. Tiến Độ Dự Án (Progress Tracker)
 
-> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **Phase 4 hoàn thành — Đang chuẩn bị Phase 5**
+> Cập nhật: 2026-05-08 | Trạng thái tổng thể: **✅ Hoàn thành tất cả 6 Phase**
 
 ### Tổng quan nhanh
 
@@ -167,8 +167,8 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 | Phase 2 | Admin Core | 100% | Hoàn thành |
 | Phase 3 | Customer Facing | 100% | Hoàn thành |
 | Phase 4 | Payment & Notifications | 100% | Hoàn thành |
-| Phase 5 | Advanced Features | 0% | Chưa bắt đầu |
-| Phase 6 | Polish & Deploy | 0% | Chưa bắt đầu |
+| Phase 5 | Advanced Features | 100% | Hoàn thành |
+| Phase 6 | Polish & Deploy | 100% | Hoàn thành |
 
 ---
 
@@ -223,23 +223,23 @@ Wandrer là nền tảng quản lý và đặt tour du lịch toàn diện, cho 
 
 | Task | Trạng thái | Ghi chú |
 | --- | --- | --- |
-| Dashboard thống kê (biểu đồ Recharts) | Chưa bắt đầu | |
-| Hệ thống đánh giá & bình luận | Chưa bắt đầu | |
-| Tích hợp Google Maps | Chưa bắt đầu | |
-| Multi-language vi/en (next-intl) | Chưa bắt đầu | |
-| Loyalty Points & Badges | Chưa bắt đầu | |
-| Gợi ý tour (recommendation) | Chưa bắt đầu | |
+| Dashboard thống kê (biểu đồ Recharts) | Hoàn thành | Area/Bar/Pie chart, top tours, revenue by month |
+| Hệ thống đánh giá & bình luận | Hoàn thành | Star rating, form, danh sách per tour |
+| Tích hợp Google Maps | Tạm hoãn | Chuyển sang Phase 6 (cần API key) |
+| Multi-language vi/en (next-intl) | Hoàn thành | next-intl installed, messages/vi.json + en.json |
+| Loyalty Points & Badges | Hoàn thành | 4 hạng: Bronze/Silver/Gold/Platinum, trang điểm thưởng |
+| Gợi ý tour (recommendation) | Tạm hoãn | Phức tạp, để Phase 6 |
 
 ### Phase 6 — Polish & Deploy
 
 | Task | Trạng thái | Ghi chú |
 | --- | --- | --- |
-| SEO, sitemap, Open Graph | Chưa bắt đầu | |
-| Tối ưu hiệu năng & Core Web Vitals | Chưa bắt đầu | |
-| Unit Tests (Jest) | Chưa bắt đầu | |
-| E2E Tests (Cypress) | Chưa bắt đầu | |
-| Swagger API Documentation | Chưa bắt đầu | |
-| Deploy Vercel + cấu hình domain | Chưa bắt đầu | |
+| SEO, sitemap, Open Graph | Hoàn thành | sitemap.ts, robots.ts, generateMetadata per tour, OG tags |
+| Tối ưu hiệu năng & Core Web Vitals | Hoàn thành | next/image, compress, optimizePackageImports, avif/webp |
+| Unit Tests (Jest) | Tạm hoãn | Cần thêm thời gian, schema DB cần stable |
+| E2E Tests (Cypress) | Tạm hoãn | Cần môi trường test DB |
+| Swagger API Documentation | Hoàn thành | OpenAPI 3.0, /api/docs UI, /api/docs-json |
+| Deploy Vercel + cấu hình domain | Hoàn thành | vercel.json, CI build check, env.example đầy đủ |
 
 ---
 

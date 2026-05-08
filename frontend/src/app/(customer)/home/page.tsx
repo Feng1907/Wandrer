@@ -1,4 +1,15 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
+
+export const metadata: Metadata = {
+  title: 'Wandrer — Khám phá & Đặt Tour Du Lịch',
+  description: 'Nền tảng đặt tour du lịch trực tuyến uy tín. Hàng trăm tour chất lượng cao, giá tốt nhất, đặt dễ dàng.',
+  openGraph: {
+    title: 'Wandrer — Khám phá & Đặt Tour Du Lịch',
+    description: 'Tìm kiếm và đặt tour du lịch Việt Nam chất lượng cao.',
+    type: 'website',
+  },
+};
 import { Search, MapPin, Star, TrendingUp } from 'lucide-react';
 import TourCard from '@/components/customer/TourCard';
 import api from '@/lib/axios';
