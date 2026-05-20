@@ -20,6 +20,7 @@ interface BookingEmailData {
   totalPrice: number;
   bookingId: string;
   discountAmount?: number;
+  eTicketPdf?: Buffer;
 }
 
 const formatVND = (amount: number) =>
@@ -98,6 +99,9 @@ export const sendBookingConfirmationEmail = async (data: BookingEmailData) => {
     to: data.to,
     subject: `✅ Xác nhận đặt tour: ${data.tourTitle}`,
     html,
+    attachments: data.eTicketPdf
+      ? [{ filename: `eticket-${data.bookingId.slice(0, 8).toUpperCase()}.pdf`, content: data.eTicketPdf, contentType: 'application/pdf' }]
+      : [],
   });
 };
 

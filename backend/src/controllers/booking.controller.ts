@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import * as bookingService from '../services/booking.service';
-type BookingStatus = 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'COMPLETED';
+type BookingStatus = 'PENDING_PAYMENT' | 'PENDING' | 'CONFIRMED' | 'CANCELLED' | 'REFUNDED' | 'COMPLETED';
 
 export const createBooking = async (req: Request, res: Response) => {
   try {

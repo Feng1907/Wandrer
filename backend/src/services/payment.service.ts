@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import prisma from '../utils/prisma';
 import { emitToUser } from '../utils/socket';
 import { sendBookingConfirmationEmail } from '../utils/email';
+import { generateETicketPDF } from '../utils/pdf';
 
 // ─── VNPay ───────────────────────────────────────────────────────────────────
 
@@ -87,6 +88,8 @@ export const confirmPayment = async (bookingId: string, transactionId: string, p
     },
   });
   if (!booking) throw new Error('Booking không tồn tại');
+  if (booking.status === 'CANCELLED') throw new Error('Booking đã bị hủy hoặc hết hạn giữ chỗ');
+  if (booking.status === 'CONFIRMED') throw new Error('Booking đã được thanh toán trước đó');
 
   await prisma.$transaction([
     prisma.payment.upsert({
@@ -111,6 +114,23 @@ export const confirmPayment = async (bookingId: string, transactionId: string, p
     message: `Tour "${booking.departure.tour.title}" đã được xác nhận!`,
   });
 
+  // Generate E-ticket PDF with QR code
+  let eTicketPdf: Buffer | undefined;
+  try {
+    eTicketPdf = await generateETicketPDF({
+      bookingId: booking.id,
+      contactName: booking.contactName,
+      tourTitle: booking.departure.tour.title,
+      departureDate: booking.departure.departureDate.toISOString(),
+      returnDate: booking.departure.returnDate.toISOString(),
+      passengers: booking.passengers,
+      totalPrice: Number(booking.totalPrice),
+      discountAmount: Number(booking.discountAmount),
+    });
+  } catch (pdfErr) {
+    console.error('[Payment] Tạo E-ticket PDF thất bại:', pdfErr);
+  }
+
   await sendBookingConfirmationEmail({
     to: booking.contactEmail,
     contactName: booking.contactName,
@@ -121,6 +141,7 @@ export const confirmPayment = async (bookingId: string, transactionId: string, p
     totalPrice: Number(booking.totalPrice),
     bookingId: booking.id,
     discountAmount: Number(booking.discountAmount),
+    eTicketPdf,
   });
 
   return booking;
