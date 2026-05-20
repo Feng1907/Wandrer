@@ -4,7 +4,8 @@ export interface CreateDepartureDto {
   tourId: string;
   departureDate: string;
   returnDate: string;
-  availableSlots: number;
+  totalSlots: number;
+  availableSlots?: number;
   priceOverride?: number;
 }
 
@@ -12,12 +13,14 @@ export const createDeparture = async (dto: CreateDepartureDto) => {
   const tour = await prisma.tour.findUnique({ where: { id: dto.tourId } });
   if (!tour) throw new Error('Tour không tồn tại');
 
+  const slots = dto.availableSlots ?? dto.totalSlots;
   return prisma.departure.create({
     data: {
       tourId: dto.tourId,
       departureDate: new Date(dto.departureDate),
       returnDate: new Date(dto.returnDate),
-      availableSlots: dto.availableSlots,
+      totalSlots: dto.totalSlots,
+      availableSlots: slots,
       priceOverride: dto.priceOverride ? Number(dto.priceOverride) : null,
     },
   });

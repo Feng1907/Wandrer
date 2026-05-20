@@ -1,10 +1,10 @@
 generator client {
-  provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "mongodb"
+  url      = env("DATABASE_URL")
 }
 
 model User {
@@ -28,23 +28,25 @@ model User {
 }
 
 model Tour {
-  id           String      @id @default(auto()) @map("_id") @db.ObjectId
-  title        String
-  slug         String      @unique
-  description  String
-  highlights   String
-  includes     String
-  excludes     String
-  cancelPolicy String
-  basePrice    Float
-  childPrice   Float
-  duration     Int
-  maxCapacity  Int
-  category     String
-  status       String      @default("DRAFT")
-  featured     Boolean     @default(false)
-  createdAt    DateTime    @default(now())
-  updatedAt    DateTime    @updatedAt
+  id                    String      @id @default(auto()) @map("_id") @db.ObjectId
+  title                 String
+  slug                  String      @unique
+  description           String
+  highlights            String
+  includes              String
+  excludes              String
+  cancelPolicy          String
+  basePrice             Float
+  childPrice            Float
+  infantPrice           Float       @default(0)
+  singleSupplementPrice Float       @default(0)
+  duration              Int
+  maxCapacity           Int
+  category              String
+  status                String      @default("DRAFT")
+  featured              Boolean     @default(false)
+  createdAt             DateTime    @default(now())
+  updatedAt             DateTime    @updatedAt
 
   images      TourImage[]
   itineraries Itinerary[]
@@ -81,8 +83,10 @@ model Departure {
   tourId         String    @db.ObjectId
   departureDate  DateTime
   returnDate     DateTime
+  totalSlots     Int
   availableSlots Int
   priceOverride  Float?
+  status         String    @default("OPEN")
   isActive       Boolean   @default(true)
   createdAt      DateTime  @default(now())
 
@@ -98,12 +102,13 @@ model Booking {
   subtotal        Float
   discountAmount  Float     @default(0)
   totalPrice      Float
-  status          String    @default("PENDING")
+  status          String    @default("PENDING_PAYMENT")
   specialRequests String?
   contactName     String
   contactEmail    String
   contactPhone    String
   discountCodeId  String?   @db.ObjectId
+  expiredAt       DateTime?
   createdAt       DateTime  @default(now())
   updatedAt       DateTime  @updatedAt
 
@@ -115,14 +120,17 @@ model Booking {
 }
 
 model BookingPassenger {
-  id        String    @id @default(auto()) @map("_id") @db.ObjectId
-  bookingId String    @db.ObjectId
-  fullName  String
-  dob       DateTime?
-  idNumber  String?
-  type      String    @default("ADULT")
+  id              String    @id @default(auto()) @map("_id") @db.ObjectId
+  bookingId       String    @db.ObjectId
+  fullName        String
+  dob             DateTime?
+  idNumber        String?
+  type            String    @default("ADULT")
+  specialRequests String?
+  checkedIn       Boolean   @default(false)
+  checkedInAt     DateTime?
 
-  booking   Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  booking         Booking   @relation(fields: [bookingId], references: [id], onDelete: Cascade)
 }
 
 model Payment {
