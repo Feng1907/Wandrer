@@ -1,6 +1,6 @@
 # PLAN: Hệ Thống Quản Lý Tour Du Lịch — Wandrer
 
-> **Cập nhật lần cuối:** 2026-05-20
+> **Cập nhật lần cuối:** 2026-05-21
 
 ---
 
@@ -163,7 +163,7 @@ Hệ thống áp dụng **Role-Based Access Control (RBAC) linh hoạt thông qu
 
 ## 8. Tiến Độ Dự Án (Progress Tracker)
 
-> Cập nhật: 2026-05-20 | Trạng thái tổng thể: **✅ Hoàn thành toàn bộ (Phase 1–6 + Bước 1–4)**
+> Cập nhật: 2026-05-21 | Trạng thái tổng thể: **✅ Hoàn thành toàn bộ (Phase 1–6 + Bước 1–5)**
 
 ### Tổng quan nhanh
 
@@ -179,6 +179,7 @@ Hệ thống áp dụng **Role-Based Access Control (RBAC) linh hoạt thông qu
 | Bước 2 | E-ticket & QR Check-in | 100% | ✅ Hoàn thành |
 | Bước 3 | AI Integration | 100% | ✅ Hoàn thành |
 | Bước 4 | Unit Tests | 100% | ✅ Hoàn thành |
+| Bước 5 | Trang bổ sung & Flash Sale | 100% | ✅ Hoàn thành |
 
 ---
 
@@ -295,7 +296,7 @@ Hệ thống áp dụng **Role-Based Access Control (RBAC) linh hoạt thông qu
 | Tạo `ai.controller.ts`: validate prompt (5–500 ký tự) | ✅ Hoàn thành | — |
 | Tạo `ai.routes.ts` + wire vào `app.ts` | ✅ Hoàn thành | `POST /api/ai/recommend` — public, không cần đăng nhập |
 | Thêm `GEMINI_API_KEY` vào `.env.example` | ✅ Hoàn thành | — |
-| UI: ô input prompt tự nhiên trên trang chủ | ⏳ Chưa bắt đầu | Việc Frontend (Bước 3 Backend đã xong) |
+| UI: AI Chat Widget trên trang chủ | ✅ Hoàn thành | `AIChatWidget.tsx` — nổi góc phải, nhập prompt → gọi `/api/ai/recommend` → hiển thị tour gợi ý |
 
 ### Bước 4 — Unit Tests ✅
 
@@ -308,6 +309,25 @@ Hệ thống áp dụng **Role-Based Access Control (RBAC) linh hoạt thông qu
 | `booking.cancellation.test.ts`: 13 test cases Cancellation Engine | ✅ Hoàn thành | Mốc 15/7/<7 ngày, refund chính xác, isBookingExpired |
 | `booking.expiry.test.ts`: 7 test cases expiry logic | ✅ Hoàn thành | Edge cases: null expiredAt, quá khứ xa, tương lai xa |
 | **Tổng: 44/44 tests passed** | ✅ | `npx jest` — 3 suites, 3.25s |
+
+### Bước 5 — Trang Bổ Sung & Flash Sale ✅
+
+| Task | Trạng thái | Ghi chú |
+| --- | --- | --- |
+| Trang Vé máy bay (`/flights`) | ✅ Hoàn thành | Form tìm kiếm (1 chiều/khứ hồi), chọn hành khách, tuyến bay phổ biến |
+| Trang Khách sạn (`/hotels`) | ✅ Hoàn thành | Tìm kiếm theo điểm đến, picker phòng/khách, grid khách sạn trong nước + quốc tế |
+| Trang Combo du lịch (`/combo`) | ✅ Hoàn thành | Form tìm kiếm kép (bay + khách sạn), thẻ combo deal |
+| Trang Dịch vụ cộng thêm (`/extra-services`) | ✅ Hoàn thành | Danh sách dịch vụ bổ sung (visa, bảo hiểm, hành lý…) |
+| Trang Tour Giờ Chót (`/flash-sale`) | ✅ Hoàn thành | Hero banner gradient, grid 4 cột, countdown timer real-time, badge giảm giá |
+| Trang Quên mật khẩu (`/forgot-password`) | ✅ Hoàn thành | Form email, gửi link reset qua SMTP |
+| Banner Flash Sale trên trang chủ | ✅ Hoàn thành | Banner gradient cam-đỏ, nút "Xem ưu đãi" → `/flash-sale` |
+| DateRangePicker component | ✅ Hoàn thành | Calendar 2 tháng, chọn khoảng ngày, dùng cho flights/hotels/combo |
+| Footer component | ✅ Hoàn thành | Link nhanh, liên hệ, mạng xã hội |
+| SearchHero component | ✅ Hoàn thành | Tab search đa loại (tour/flight/hotel/combo) trên hero trang chủ |
+| TourCarouselSection component | ✅ Hoàn thành | Carousel tour nổi bật, cuộn ngang |
+| LastMinuteDealsSection component | ✅ Hoàn thành | Section ưu đãi giờ chót nhúng trên trang chủ |
+| Seed 13 tour quốc tế | ✅ Hoàn thành | Thái Lan, Singapore, Hàn Quốc, Nhật Bản, Mỹ — `scripts/seed-international-tours.js` |
+| README.md | ✅ Hoàn thành | Tech stack, cấu trúc dự án, hướng dẫn cài đặt, biến môi trường, API reference |
 
 ---
 
