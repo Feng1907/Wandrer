@@ -17,6 +17,7 @@ import reviewRoutes from './routes/review.routes';
 import loyaltyRoutes from './routes/loyalty.routes';
 import guideRoutes from './routes/guide.routes';
 import aiRoutes from './routes/ai.routes';
+import priceAlertRoutes from './routes/priceAlert.routes';
 
 const app = express();
 
@@ -42,6 +43,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/loyalty', loyaltyRoutes);
 app.use('/api/guide', guideRoutes);
 app.use('/api/ai', aiRoutes);
+app.use('/api/price-alerts', priceAlertRoutes);
 
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec, { customSiteTitle: 'Wandrer API Docs' }));
 app.get('/api/docs-json', (_req, res) => res.json(swaggerSpec));

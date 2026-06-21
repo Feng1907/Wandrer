@@ -255,3 +255,38 @@ export const getAdminBookings = async (page = 1, limit = 15, status?: BookingSta
 export const updateBookingStatus = async (bookingId: string, status: BookingStatus) => {
   return prisma.booking.update({ where: { id: bookingId }, data: { status } });
 };
+
+export const lookupBookingByCode = async (bookingId: string) => {
+  const booking = await prisma.booking.findUnique({
+    where: { id: bookingId },
+    include: {
+      passengers: { select: { fullName: true, type: true, checkedIn: true } },
+      departure: {
+        include: {
+          tour: { select: { title: true, duration: true, category: true } },
+        },
+      },
+      payment: { select: { provider: true, status: true } },
+    },
+  });
+  if (!booking) return null;
+
+  return {
+    id: booking.id,
+    status: booking.status,
+    contactName: booking.contactName,
+    totalPrice: booking.totalPrice,
+    createdAt: booking.createdAt,
+    tour: {
+      title: booking.departure.tour.title,
+      duration: booking.departure.tour.duration,
+      category: booking.departure.tour.category,
+    },
+    departure: {
+      departureDate: booking.departure.departureDate,
+      returnDate: booking.departure.returnDate,
+    },
+    passengers: booking.passengers,
+    payment: booking.payment,
+  };
+};

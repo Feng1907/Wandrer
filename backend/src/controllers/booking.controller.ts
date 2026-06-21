@@ -43,6 +43,16 @@ export const cancelBooking = async (req: Request, res: Response) => {
   }
 };
 
+export const lookupBooking = async (req: Request, res: Response) => {
+  try {
+    const booking = await bookingService.lookupBookingByCode(String(req.params.code));
+    if (!booking) return res.status(404).json({ message: 'Không tìm thấy booking' });
+    res.json(booking);
+  } catch (err: any) {
+    res.status(500).json({ message: err.message });
+  }
+};
+
 export const adminGetBookings = async (req: Request, res: Response) => {
   try {
     const { page, limit, status } = req.query;

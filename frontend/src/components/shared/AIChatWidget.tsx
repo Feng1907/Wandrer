@@ -1,6 +1,7 @@
 'use client';
 
 import axios from 'axios';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { Bot, ChevronDown, Send, Sparkles, ThumbsDown, ThumbsUp, X } from 'lucide-react';
@@ -158,18 +159,31 @@ export default function AIChatWidget() {
                       <Link
                         key={tour.tourId}
                         href={`/tours/${tour.slug}`}
-                        className="block rounded-xl border border-neutral-100 bg-white p-3 text-sm shadow-sm transition-colors hover:border-blue-200 hover:bg-blue-50"
+                        className="flex gap-3 rounded-xl border border-neutral-100 bg-white p-3 text-sm shadow-sm transition-colors hover:border-blue-200 hover:bg-blue-50"
                       >
-                        <div className="flex items-start justify-between gap-3">
-                          <p className="font-semibold text-neutral-900">{tour.title}</p>
-                          <span className="shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-700">
-                            {tour.matchScore}/10
-                          </span>
+                        {tour.primaryImage && (
+                          <div className="relative h-16 w-20 shrink-0 overflow-hidden rounded-lg">
+                            <Image
+                              src={tour.primaryImage}
+                              alt={tour.title}
+                              fill
+                              className="object-cover"
+                              sizes="80px"
+                            />
+                          </div>
+                        )}
+                        <div className="min-w-0 flex-1">
+                          <div className="flex items-start justify-between gap-2">
+                            <p className="font-semibold text-neutral-900 leading-snug">{tour.title}</p>
+                            <span className="shrink-0 rounded-full bg-blue-100 px-2 py-0.5 text-xs font-bold text-blue-700">
+                              {tour.matchScore}/10
+                            </span>
+                          </div>
+                          <p className="mt-1 text-xs leading-5 text-neutral-500 line-clamp-2">{tour.reason}</p>
+                          <p className="mt-1.5 text-xs font-semibold text-blue-700">
+                            {tour.duration} ngày · {formatPrice(tour.basePrice)}
+                          </p>
                         </div>
-                        <p className="mt-1 text-xs leading-5 text-neutral-500">{tour.reason}</p>
-                        <p className="mt-2 text-xs font-semibold text-blue-700">
-                          {tour.duration} ngày · {formatPrice(tour.basePrice)}
-                        </p>
                       </Link>
                     ))}
                   </div>
