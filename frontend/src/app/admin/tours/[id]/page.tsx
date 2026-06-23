@@ -7,6 +7,7 @@ import { useForm, type Resolver } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { ArrowLeft, Upload, Trash2, Star } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '@/lib/axios';
 import { Tour, TourCategory, TourStatus, Itinerary, Departure } from '@/types';
 import { formatCurrency, formatDate } from '@/lib/utils';
@@ -105,10 +106,10 @@ export default function TourFormPage() {
         router.push(`/admin/tours/${data.id}`);
       } else {
         await api.patch(`/tours/${id}`, values);
-        alert('Lưu thành công!');
+        toast.success('Lưu thành công!');
       }
     } catch (e) {
-      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Có lỗi xảy ra');
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Có lỗi xảy ra');
     } finally {
       setSaving(false);
     }
@@ -303,9 +304,9 @@ function ItineraryEditor({
       const { data } = await api.put(`/tours/${tourId}/itineraries`, items);
       onChange(data);
       setItems(data);
-      alert('Lưu lịch trình thành công!');
+      toast.success('Lưu lịch trình thành công!');
     } catch {
-      alert('Lỗi khi lưu lịch trình');
+      toast.error('Lỗi khi lưu lịch trình');
     } finally {
       setSaving(false);
     }
@@ -377,7 +378,7 @@ function DepartureManager({
       setShowForm(false);
       setForm({ departureDate: '', returnDate: '', availableSlots: 20, priceOverride: '' });
     } catch (e) {
-      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi');
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi');
     }
   };
 

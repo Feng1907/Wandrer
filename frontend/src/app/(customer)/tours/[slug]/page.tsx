@@ -7,6 +7,7 @@ import {
   Clock, Users, CheckCircle, XCircle, ChevronDown, ChevronUp,
   Heart, GitCompare, MapPin, Star, ChevronRight, Phone, Bell,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import ReviewSection from '@/components/customer/ReviewSection';
 import api from '@/lib/axios';
 import { Tour, Departure } from '@/types';
@@ -56,7 +57,7 @@ export default function TourDetailPage() {
 
   const handleBook = () => {
     if (!user) { router.push('/login'); return; }
-    if (!selectedDeparture) { alert('Vui lòng chọn lịch khởi hành'); return; }
+    if (!selectedDeparture) { toast.error('Vui lòng chọn lịch khởi hành'); return; }
     router.push(`/booking/${selectedDeparture.id}`);
   };
 
@@ -68,7 +69,7 @@ export default function TourDetailPage() {
       setAlertSent(true);
       setAlertOpen(false);
     } catch {
-      alert('Không thể đăng ký. Vui lòng thử lại.');
+      toast.error('Không thể đăng ký. Vui lòng thử lại.');
     }
   };
 
@@ -76,7 +77,7 @@ export default function TourDetailPage() {
     if (!tour) return;
     const stored = JSON.parse(localStorage.getItem('compare') ?? '[]') as string[];
     if (stored.includes(tour.id)) return;
-    if (stored.length >= 3) { alert('Chỉ có thể so sánh tối đa 3 tour'); return; }
+    if (stored.length >= 3) { toast.error('Chỉ có thể so sánh tối đa 3 tour'); return; }
     localStorage.setItem('compare', JSON.stringify([...stored, tour.id]));
     router.push('/compare');
   };

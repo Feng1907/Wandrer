@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { Star } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '@/lib/axios';
 import { useAuthStore } from '@/store/auth.store';
 import { formatDate } from '@/lib/utils';
@@ -118,7 +119,7 @@ export default function ReviewSection({ tourId }: Props) {
       setCriteria({ guide: 5, food: 5, transport: 5, hotel: 5 });
       await loadReviews();
     } catch (err: unknown) {
-      alert(err instanceof Error ? err.message : 'Lỗi khi gửi đánh giá');
+      toast.error(err instanceof Error ? err.message : 'Lỗi khi gửi đánh giá');
     } finally {
       setSubmitting(false);
     }
