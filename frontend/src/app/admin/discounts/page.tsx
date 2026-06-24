@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import { Plus, Trash2, ToggleLeft, ToggleRight } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '@/lib/axios';
 import { formatCurrency, formatDate } from '@/lib/utils';
 
@@ -55,7 +56,7 @@ export default function DiscountsPage() {
       setForm({ code: '', type: 'PERCENTAGE', value: '', minOrderValue: '', usageLimit: '', expiresAt: '' });
       await loadDiscounts();
     } catch (e) {
-      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi');
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi');
     }
   };
 

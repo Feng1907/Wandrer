@@ -4,6 +4,9 @@ import { authenticate, authorize } from '../middlewares/auth.middleware';
 
 const router = Router();
 
+// Public route — no auth required
+router.get('/lookup/:code', bookingCtrl.lookupBooking);
+
 // Customer routes
 router.use(authenticate);
 router.post('/', bookingCtrl.createBooking);

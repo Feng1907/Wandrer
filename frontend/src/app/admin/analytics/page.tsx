@@ -5,7 +5,7 @@ import {
   AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
   XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
 } from 'recharts';
-import { TrendingUp, Users, Map, ShoppingBag, Clock } from 'lucide-react';
+import { TrendingUp, Users, Map, ShoppingBag, Clock, Download } from 'lucide-react';
 import api from '@/lib/axios';
 import { formatCurrency } from '@/lib/utils';
 
@@ -44,12 +44,33 @@ const STATUS_LABEL: Record<string, string> = {
   CANCELLED: 'Đã hủy', COMPLETED: 'Hoàn thành',
 };
 
+const QUARTER_MONTHS: Record<string, number[]> = {
+  Q1: [1, 2, 3], Q2: [4, 5, 6], Q3: [7, 8, 9], Q4: [10, 11, 12],
+};
+
+function exportCsv(revenue: MonthData[], year: number, quarter: string) {
+  const rows = quarter === 'all'
+    ? revenue
+    : revenue.filter((r) => QUARTER_MONTHS[quarter]?.includes(r.month));
+
+  const header = 'Tháng,Doanh thu (VND),Số booking';
+  const body = rows.map((r) => `${r.label},${r.revenue},${r.bookings}`).join('\n');
+  const blob = new Blob([`﻿${header}\n${body}`], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `wandrer-revenue-${year}${quarter !== 'all' ? `-${quarter}` : ''}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
 export default function AnalyticsPage() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [revenue, setRevenue] = useState<MonthData[]>([]);
   const [topTours, setTopTours] = useState<TopTour[]>([]);
   const [statusBreakdown, setStatusBreakdown] = useState<StatusItem[]>([]);
   const [year, setYear] = useState(new Date().getFullYear());
+  const [quarter, setQuarter] = useState<'all' | 'Q1' | 'Q2' | 'Q3' | 'Q4'>('all');
 
   const load = useCallback(async () => {
     const [s, r, t, b] = await Promise.all([
@@ -67,22 +88,48 @@ export default function AnalyticsPage() {
   // eslint-disable-next-line react-hooks/set-state-in-effect
   useEffect(() => { load(); }, [load]);
 
+  const filteredRevenue = quarter === 'all'
+    ? revenue
+    : revenue.filter((r) => QUARTER_MONTHS[quarter]?.includes(r.month));
+
 
 
   return (
     <div>
-      <div className="mb-8 flex items-center justify-between">
+      <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-neutral-900">Thống kê & Báo cáo</h1>
           <p className="text-sm text-neutral-500">Tổng quan hoạt động kinh doanh</p>
         </div>
-        <select
-          value={year}
-          onChange={(e) => setYear(Number(e.target.value))}
-          className="rounded-xl border border-neutral-200 px-4 py-2 text-sm outline-none focus:border-blue-500"
-        >
-          {[2024, 2025, 2026].map((y) => <option key={y} value={y}>{y}</option>)}
-        </select>
+        <div className="flex flex-wrap items-center gap-2">
+          {/* Quarter shortcuts */}
+          {(['all', 'Q1', 'Q2', 'Q3', 'Q4'] as const).map((q) => (
+            <button
+              key={q}
+              onClick={() => setQuarter(q)}
+              className={`rounded-lg border px-3 py-1.5 text-xs font-semibold transition-colors ${
+                quarter === q
+                  ? 'border-blue-500 bg-blue-500 text-white'
+                  : 'border-neutral-200 bg-white text-neutral-600 hover:border-blue-300'
+              }`}
+            >
+              {q === 'all' ? 'Cả năm' : q}
+            </button>
+          ))}
+          <select
+            value={year}
+            onChange={(e) => setYear(Number(e.target.value))}
+            className="rounded-xl border border-neutral-200 px-4 py-2 text-sm outline-none focus:border-blue-500"
+          >
+            {[2024, 2025, 2026].map((y) => <option key={y} value={y}>{y}</option>)}
+          </select>
+          <button
+            onClick={() => exportCsv(revenue, year, quarter)}
+            className="flex items-center gap-2 rounded-xl border border-emerald-500 bg-emerald-500 px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-emerald-600"
+          >
+            <Download className="h-4 w-4" /> Xuất CSV
+          </button>
+        </div>
       </div>
 
       {/* Stat cards */}
@@ -102,9 +149,11 @@ export default function AnalyticsPage() {
       <div className="mb-6 grid gap-6 lg:grid-cols-3">
         {/* Revenue chart */}
         <div className="lg:col-span-2 rounded-2xl border border-neutral-200 bg-white p-6">
-          <h2 className="mb-4 font-semibold text-neutral-900">Doanh thu theo tháng — {year}</h2>
+          <h2 className="mb-4 font-semibold text-neutral-900">
+            Doanh thu — {quarter === 'all' ? year : `${quarter}/${year}`}
+          </h2>
           <ResponsiveContainer width="100%" height={260}>
-            <AreaChart data={revenue}>
+            <AreaChart data={filteredRevenue}>
               <defs>
                 <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
                   <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.15} />
@@ -139,7 +188,7 @@ export default function AnalyticsPage() {
         <div className="rounded-2xl border border-neutral-200 bg-white p-6">
           <h2 className="mb-4 font-semibold text-neutral-900">Số booking theo tháng</h2>
           <ResponsiveContainer width="100%" height={220}>
-            <BarChart data={revenue}>
+            <BarChart data={filteredRevenue}>
               <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
               <XAxis dataKey="label" tick={{ fontSize: 12 }} />
               <YAxis tick={{ fontSize: 12 }} />

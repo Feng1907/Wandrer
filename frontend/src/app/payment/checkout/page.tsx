@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import { CreditCard, Smartphone } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '@/lib/axios';
 
 const METHODS = [
@@ -29,7 +30,7 @@ export default function CheckoutPage() {
         window.location.assign(data.payUrl);
       }
     } catch (e) {
-      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi khi tạo link thanh toán');
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi khi tạo link thanh toán');
       setLoading(false);
     }
   };

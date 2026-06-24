@@ -6,6 +6,7 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Plus, Trash2, CheckCircle } from 'lucide-react';
+import { toast } from 'sonner';
 import api from '@/lib/axios';
 import { formatCurrency } from '@/lib/utils';
 import { useAuthStore } from '@/store/auth.store';
@@ -91,7 +92,7 @@ export default function BookingPage() {
       setBookingId(data.id);
       setSuccess(true);
     } catch (e) {
-      alert((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi khi đặt tour');
+      toast.error((e as { response?: { data?: { message?: string } } })?.response?.data?.message ?? 'Lỗi khi đặt tour');
     } finally {
       setSubmitting(false);
     }

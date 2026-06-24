@@ -262,7 +262,11 @@ export default function ComboPage() {
                 minDate={today}
               />
               <div className="flex w-36 shrink-0 items-center justify-center px-3 py-2">
-                <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-blue-600 h-full text-sm font-bold text-white transition-colors hover:bg-blue-700">
+                <button
+                  disabled
+                  title="Tính năng đang phát triển"
+                  className="flex w-full items-center justify-center gap-2 rounded-xl bg-neutral-300 h-full text-sm font-bold text-neutral-500 cursor-not-allowed"
+                >
                   <Search className="h-4 w-4" /> Tìm kiếm
                 </button>
               </div>
@@ -271,6 +275,23 @@ export default function ComboPage() {
         </div>{/* end form card */}
         </div>{/* end relative z-10 */}
       </div>{/* end hero */}
+
+      {/* Coming Soon notice */}
+      <div className="mx-auto max-w-7xl px-6 mt-6">
+        <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+          <span className="mt-0.5 shrink-0 text-amber-500">
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </span>
+          <div>
+            <p className="font-semibold text-amber-800">Tính năng đang phát triển</p>
+            <p className="mt-0.5 text-sm text-amber-700">
+              Chức năng tìm kiếm combo đang được tích hợp. Trong thời gian chờ, bạn có thể{' '}
+              <a href="/tours" className="font-semibold underline hover:text-amber-900">đặt tour trọn gói</a>{' '}
+              — đã bao gồm vé máy bay + khách sạn + HDV trong một gói duy nhất.
+            </p>
+          </div>
+        </div>
+      </div>
 
       {/* ── Hot deal ── */}
       <div className="relative z-0 mx-auto max-w-7xl px-6 py-14">

@@ -185,10 +185,31 @@ export default function FlightsPage() {
               )}
             </div>
 
-            {/* Search button */}
-            <button className="flex shrink-0 items-center gap-2 rounded-xl bg-blue-600 mx-3 my-2 px-6 text-sm font-bold text-white transition-colors hover:bg-blue-700">
+            {/* Search button — disabled until flight integration is live */}
+            <button
+              disabled
+              title="Tính năng đang phát triển"
+              className="flex shrink-0 items-center gap-2 rounded-xl bg-neutral-300 mx-3 my-2 px-6 text-sm font-bold text-neutral-500 cursor-not-allowed"
+            >
               <Search className="h-4 w-4" /> Tìm kiếm
             </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Coming Soon notice */}
+      <div className="mx-auto max-w-7xl px-6 mt-6">
+        <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4">
+          <span className="mt-0.5 shrink-0 text-amber-500">
+            <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          </span>
+          <div>
+            <p className="font-semibold text-amber-800">Tính năng đang phát triển</p>
+            <p className="mt-0.5 text-sm text-amber-700">
+              Chức năng đặt vé máy bay đang được tích hợp. Trong thời gian chờ, bạn có thể{' '}
+              <a href="/tours" className="font-semibold underline hover:text-amber-900">đặt tour trọn gói</a>{' '}
+              — bao gồm vé máy bay + khách sạn + HDV.
+            </p>
           </div>
         </div>
       </div>

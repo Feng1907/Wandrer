@@ -17,6 +17,9 @@ model User {
   role          String         @default("CUSTOMER")
   loyaltyPoints Int            @default(0)
   isActive      Boolean        @default(true)
+  emailVerified Boolean        @default(false)
+  verificationToken String?
+  verificationTokenExpiresAt DateTime?
   createdAt     DateTime       @default(now())
   updatedAt     DateTime       @updatedAt
 
@@ -221,4 +224,15 @@ model Notification {
   createdAt DateTime @default(now())
 
   user      User     @relation(fields: [userId], references: [id])
+}
+
+model PriceAlert {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  email       String
+  tourId      String   @db.ObjectId
+  targetPrice Float?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@unique([email, tourId])
 }

@@ -40,12 +40,9 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
 
   useEffect(() => {
-    Promise.all([
-      api.get('/tours?limit=1').then((r) => r.data.total),
-      api.get('/users?limit=1').then((r) => r.data.total),
-    ])
-      .then(([totalTours, totalUsers]) => {
-        setStats({ totalTours, totalUsers, totalBookings: 0, totalRevenue: 0 });
+    api.get('/analytics/stats')
+      .then((r) => {
+        setStats(r.data);
       })
       .catch(() => {});
   }, []);

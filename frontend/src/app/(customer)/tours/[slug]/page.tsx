@@ -5,8 +5,9 @@ import { useParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   Clock, Users, CheckCircle, XCircle, ChevronDown, ChevronUp,
-  Heart, GitCompare, MapPin, Star, ChevronRight, Phone,
+  Heart, GitCompare, MapPin, Star, ChevronRight, Phone, Bell,
 } from 'lucide-react';
+import { toast } from 'sonner';
 import ReviewSection from '@/components/customer/ReviewSection';
 import api from '@/lib/axios';
 import { Tour, Departure } from '@/types';
@@ -32,6 +33,9 @@ export default function TourDetailPage() {
   const [selectedDeparture, setSelectedDeparture] = useState<Departure | null>(null);
   const [saved, setSaved] = useState(false);
   const [activeTab, setActiveTab] = useState<Tab>('overview');
+  const [alertEmail, setAlertEmail] = useState('');
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [alertSent, setAlertSent] = useState(false);
 
   useEffect(() => {
     api.get(`/tours/${slug}`)
@@ -53,15 +57,27 @@ export default function TourDetailPage() {
 
   const handleBook = () => {
     if (!user) { router.push('/login'); return; }
-    if (!selectedDeparture) { alert('Vui lòng chọn lịch khởi hành'); return; }
+    if (!selectedDeparture) { toast.error('Vui lòng chọn lịch khởi hành'); return; }
     router.push(`/booking/${selectedDeparture.id}`);
+  };
+
+  const handleSubscribeAlert = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!tour || !alertEmail.trim()) return;
+    try {
+      await api.post('/price-alerts/subscribe', { email: alertEmail, tourId: tour.id });
+      setAlertSent(true);
+      setAlertOpen(false);
+    } catch {
+      toast.error('Không thể đăng ký. Vui lòng thử lại.');
+    }
   };
 
   const handleAddToCompare = () => {
     if (!tour) return;
     const stored = JSON.parse(localStorage.getItem('compare') ?? '[]') as string[];
     if (stored.includes(tour.id)) return;
-    if (stored.length >= 3) { alert('Chỉ có thể so sánh tối đa 3 tour'); return; }
+    if (stored.length >= 3) { toast.error('Chỉ có thể so sánh tối đa 3 tour'); return; }
     localStorage.setItem('compare', JSON.stringify([...stored, tour.id]));
     router.push('/compare');
   };
@@ -328,6 +344,44 @@ export default function TourDetailPage() {
                     So sánh
                   </button>
                 </div>
+              </div>
+
+              {/* Price alert */}
+              <div className="rounded-2xl border border-neutral-200 bg-white p-4 shadow-sm">
+                {alertSent ? (
+                  <div className="flex items-center gap-2 text-sm text-emerald-700">
+                    <CheckCircle className="h-4 w-4" />
+                    Đã đăng ký! Chúng tôi sẽ báo khi giá thay đổi.
+                  </div>
+                ) : (
+                  <>
+                    <button
+                      onClick={() => setAlertOpen(!alertOpen)}
+                      className="flex w-full items-center gap-2 text-sm font-medium text-neutral-700 hover:text-blue-600 transition-colors"
+                    >
+                      <Bell className="h-4 w-4 text-amber-500" />
+                      Theo dõi giá — nhận thông báo khi giảm
+                    </button>
+                    {alertOpen && (
+                      <form onSubmit={handleSubscribeAlert} className="mt-3 flex gap-2">
+                        <input
+                          type="email"
+                          required
+                          value={alertEmail}
+                          onChange={(e) => setAlertEmail(e.target.value)}
+                          placeholder="Email của bạn"
+                          className="flex-1 min-w-0 rounded-xl border border-neutral-200 px-3 py-2 text-sm outline-none focus:border-blue-500"
+                        />
+                        <button
+                          type="submit"
+                          className="rounded-xl bg-amber-500 px-3 py-2 text-sm font-semibold text-white hover:bg-amber-600"
+                        >
+                          OK
+                        </button>
+                      </form>
+                    )}
+                  </>
+                )}
               </div>
 
               {/* Contact card */}
