@@ -122,3 +122,48 @@ export const sendDepartureReminderEmail = async (to: string, contactName: string
     html,
   });
 };
+
+export const sendVerificationEmail = async (to: string, verificationLink: string) => {
+  const html = `
+    <div style="font-family:sans-serif;max-width:560px;margin:0 auto;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,0.1)">
+      <div style="background:linear-gradient(135deg,#2563eb 0%,#1d4ed8 100%);padding:32px;text-align:center;color:white">
+        <h1 style="margin:0;font-size:28px;font-weight:700">Xác minh email</h1>
+        <p style="margin:12px 0 0;font-size:14px;opacity:0.9">Wandrer — Du lịch chất lượng cao</p>
+      </div>
+
+      <div style="padding:40px 32px">
+        <p style="margin:0 0 24px;font-size:16px;color:#111827">Cảm ơn bạn đã đăng ký tài khoản Wandrer!</p>
+        <p style="margin:0 0 32px;font-size:14px;color:#6b7280;line-height:1.6">
+          Để hoàn thành quá trình đăng ký, vui lòng xác minh địa chỉ email của bạn bằng cách nhấp vào nút dưới đây.
+          Liên kết này sẽ hết hạn trong 24 giờ.
+        </p>
+
+        <div style="text-align:center;margin-bottom:32px">
+          <a href="${verificationLink}" style="display:inline-block;background:#2563eb;color:white;padding:14px 32px;border-radius:8px;text-decoration:none;font-weight:600;font-size:15px">
+            Xác minh email
+          </a>
+        </div>
+
+        <p style="margin:0 0 24px;font-size:13px;color:#9ca3af;line-height:1.6">
+          Hoặc sao chép và dán link này vào trình duyệt:<br/>
+          <code style="background:#f3f4f6;padding:6px 10px;border-radius:4px;word-break:break-all;font-family:monospace;font-size:12px">${verificationLink}</code>
+        </p>
+
+        <div style="border-top:1px solid #e5e7eb;padding-top:24px;font-size:12px;color:#9ca3af">
+          <p style="margin:0 0 8px">Nếu bạn không tạo tài khoản này, vui lòng bỏ qua email này.</p>
+          <p style="margin:0">Đây là email tự động, vui lòng không trả lời.</p>
+        </div>
+      </div>
+
+      <div style="background:#f9fafb;border-top:1px solid #e5e7eb;padding:20px 32px;text-align:center;color:#9ca3af;font-size:12px">
+        © 2026 Wandrer · Khám phá Việt Nam theo cách của bạn
+      </div>
+    </div>`;
+
+  await transporter.sendMail({
+    from: `"Wandrer" <${process.env.SMTP_USER}>`,
+    to,
+    subject: '✉️ Xác minh email của bạn — Wandrer',
+    html,
+  });
+};
